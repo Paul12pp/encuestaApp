@@ -1,12 +1,10 @@
 import React, { useState } from "react"
-import { Button, Dimensions, StyleSheet, Text, View } from "react-native"
+import { Dimensions, StyleSheet, Text, View } from "react-native"
 import { TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import DropDownPicker from 'react-native-dropdown-picker';
-import { black } from "react-native-paper/lib/typescript/styles/colors";
 import { ScrollView } from "react-native-gesture-handler";
 
-// import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../../RouteStack";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
@@ -19,10 +17,10 @@ const deviceHeight = Dimensions.get('window').height;
 
 const FirstStepScreen: React.FC<Props> = (props: any) => {
     const [recibido, setRecibido] = useState('');
-    const [parentesco, setParentesco] = useState(null);
+    const [parentesco, setParentesco] = useState('');
     const [direccion, setDireccion] = useState('');
-    const [telefono, setTelefono] = useState(null);
-    const [items, setItems] = useState([{ label: 'item1', value: 1 }, { label: 'item2', value: 2, selected: true }]);
+    const [telefono, setTelefono] = useState('');
+    const [items, setItems] = useState([{ label: 'item1', value: 1 }, { label: 'item2', value: 2 }]);
     return (
         <SafeAreaView style={styles.content}>
             <ScrollView contentContainerStyle={styles.scrollView}>
