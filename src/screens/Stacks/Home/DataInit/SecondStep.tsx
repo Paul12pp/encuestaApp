@@ -15,21 +15,20 @@ type Props = {
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 const itemsPerPage = 3;
-const itemStudents = [{ nombre: 'Paul', edad: 15, curso: '6to' }, { nombre: 'Juan', edad: 14, curso: '5to' }];
+// const itemStudents = [{ nombre: 'Paul', edad: 15, curso: '6to' }, { nombre: 'Juan', edad: 14, curso: '5to' }];
 const SecondStepScreen: React.FC<Props> = (props: any) => {
     const [nombre, setNombre] = useState('');
     const [edad, setEdad] = useState('');
     const [curso, setCurso] = useState('');
     const [centro, setCentro] = useState('');
     const [items, setItems] = useState([{ label: 'item1', value: 1 }, { label: 'item2', value: 2 }]);
-    const [estudiantes, setEstudiantes] = useState(itemStudents);
+    const [estudiantes, setEstudiantes] = useState([{ nombre: 'Paul', edad: 15, curso: '6to' }, { nombre: 'Juan', edad: 14, curso: '5to' }]);
     const [page, setPage] = React.useState(0);
     const from = page * itemsPerPage;
     const to = (page + 1) * itemsPerPage;
 
     const addStudent = () => {
-        itemStudents.push({nombre,edad:Number(edad),curso});
-        setEstudiantes(itemStudents);
+        setEstudiantes(estudiantes.concat({nombre,edad:Number(edad),curso}));
     }
     return (
         <SafeAreaView style={styles.content}>
@@ -47,7 +46,7 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
                                 name='user'
                                 size={24}
                                 color='black'
-                            />} // where <Icon /> is any component from vector-icons or anything else
+                            />} 
                             onPress={() => { }}
                         />
                     }
@@ -136,7 +135,7 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
                     <DataTable.Pagination
                         page={page}
                         numberOfPages={Math.floor(estudiantes.length / itemsPerPage)}
-                        onPageChange={page => setPage(page)}
+                        onPageChange={(page)=>console.log("changepage")}
                         label={`${from + 1}-${to} of ${items.length}`}
                     />
                 </DataTable>
