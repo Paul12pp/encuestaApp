@@ -4,6 +4,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { DataTable, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Color from "../../../../constants/Colors";
 
 // import { Props } from "react-native-paper/lib/typescript/components/RadioButton/RadioButtonItem";
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../../RouteStack";
@@ -33,19 +34,20 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
     return (
         <SafeAreaView style={styles.content}>
             <ScrollView contentContainerStyle={styles.scrollView}>
-                <Text>Estudiantes</Text>
+                <Text style={styles.title}>Estudiantes</Text>
                 <TextInput
                     mode="outlined"
                     style={styles.inputs}
                     label="Nombre"
                     value={nombre}
                     onChangeText={text => setNombre(text)}
+                    theme={{colors: {primary: Color.primary}}}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
                                 name='user'
                                 size={24}
-                                color='black'
+                                color={Color.dark}
                             />} 
                             onPress={() => { }}
                         />
@@ -57,12 +59,13 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
                     label="Edad"
                     value={edad}
                     onChangeText={text => setEdad(text)}
+                    theme={{colors: {primary: Color.primary}}}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
                                 name='user'
                                 size={24}
-                                color='black'
+                                color={Color.dark}
                             />} // where <Icon /> is any component from vector-icons or anything else
                             onPress={() => { }}
                         />
@@ -74,12 +77,13 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
                     label="Curso"
                     value={curso}
                     onChangeText={text => setCurso(text)}
+                    theme={{colors: {primary: Color.primary}}}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
                                 name='user'
                                 size={24}
-                                color='black'
+                                color={Color.dark}
                             />} // where <Icon /> is any component from vector-icons or anything else
                             onPress={() => { }}
                         />
@@ -93,10 +97,10 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
                     labelStyle={{
                         fontSize: 14,
                         textAlign: 'left',
-                        color: 'black'
+                        color:Color.dark
                     }}
                     activeLabelStyle={{ color: 'red' }}
-                    style={{ borderColor: 'black', backgroundColor: 'white' }}
+                    style={{ borderColor:Color.dark, backgroundColor: Color.light }}
                     items={items}
                     defaultValue={null}
                     onChangeItem={item => setCentro((item.value))}
@@ -104,7 +108,7 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
                     placeholderStyle={{ color: 'gray' }}
                     searchable={true}
                     searchablePlaceholder="Buscar"
-                    searchablePlaceholderTextColor="gray"
+                    searchablePlaceholderTextColor={Color.dark}
                 />
                 <TouchableOpacity style={styles.btns}
                     onPress={addStudent}>
@@ -124,7 +128,7 @@ const SecondStepScreen: React.FC<Props> = (props: any) => {
                                         <Icon
                                             name='pencil'
                                             size={24}
-                                            color='black'
+                                            color={Color.dark}
                                             onPress={() => console.log('icon')}
                                         />
                                     </DataTable.Cell>
@@ -151,6 +155,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         // alignSelf:'center'
+    },
+    title:{
+        fontWeight:'bold',
+        fontSize:18
     },
     inputs: {
         width: deviceWidth / 1.2,
@@ -179,12 +187,12 @@ const styles = StyleSheet.create({
     btns: {
         padding: 10,
         marginTop: 10,
-        backgroundColor: 'red',
+        backgroundColor: Color.primary,
         borderRadius: 10,
         width: 200
     },
     btnText: {
-        color: 'white',
+        color: Color.light,
         alignSelf: 'center',
         textAlign: 'center'
     },
@@ -192,7 +200,7 @@ const styles = StyleSheet.create({
         marginTop: 8,
         width: deviceWidth / 1.2,
         borderWidth: 1,
-        borderColor: 'gray'
+        borderColor: Color.dark
     }
 });
 

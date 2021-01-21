@@ -6,6 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { ScrollView } from "react-native-gesture-handler";
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Color from "../../../../constants/Colors";
 
 type Props = {
     // route: ProfileScreenRouteProp;
@@ -24,13 +25,14 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
     return (
         <SafeAreaView style={styles.content}>
             <ScrollView contentContainerStyle={styles.scrollView}>
-                <Text>Datos de vivienda</Text>
+                <Text style={styles.title}>Datos de vivienda</Text>
                 <TextInput
                     mode="outlined"
                     style={styles.inputs}
                     label="Recibido por"
                     value={recibido}
                     onChangeText={text => setRecibido(text)}
+                    theme={{colors: {primary: Color.primary}}}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
@@ -50,18 +52,18 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                     labelStyle={{
                         fontSize: 14,
                         textAlign: 'left',
-                        color: 'black'
+                        color: Color.dark
                     }}
-                    activeLabelStyle={{color:'red'}}
-                    style={{ borderColor: 'black', backgroundColor: 'white' }}
+                    activeLabelStyle={{color:Color.danger}}
+                    style={{ borderColor: Color.dark, backgroundColor: Color.light }}
                     items={items}
                     defaultValue={null}
                     onChangeItem={item => setParentesco((item.value))}
                     placeholder="Parentesco"
-                    placeholderStyle={{ color: 'gray' }}
+                    placeholderStyle={{ color: Color.dark }}
                     searchable={true}
                     searchablePlaceholder="Buscar"
-                    searchablePlaceholderTextColor="gray"
+                    searchablePlaceholderTextColor={Color.dark}
                 />
                 <TextInput
                     mode="outlined"
@@ -71,12 +73,13 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                     multiline={true}
                     numberOfLines={5}
                     onChangeText={text => setDireccion(text)}
+                    theme={{colors: {primary: Color.primary}}}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
                                 name='map-marker'
                                 size={24}
-                                color='black'
+                                color={Color.dark}
                             />} // where <Icon /> is any component from vector-icons or anything else
                             onPress={() => { }}
                         />
@@ -87,14 +90,14 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                     style={styles.inputs}
                     label="Teléfono"
                     value={telefono}
-                    // selectionColor='red'
+                    theme={{colors: {primary: Color.primary}}}
                     onChangeText={text => setTelefono(text)}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
                                 name='phone'
                                 size={24}
-                                color='black'
+                                color={Color.dark}
                             />} // where <Icon /> is any component from vector-icons or anything else
                             onPress={() => { }}
                         />
@@ -112,6 +115,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         // alignSelf:'center'
+    },
+    title:{
+        fontWeight:'bold',
+        fontSize:18
     },
     inputs: {
         width: deviceWidth / 1.2,

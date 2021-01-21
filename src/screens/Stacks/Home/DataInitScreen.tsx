@@ -2,9 +2,11 @@ import React, { useRef, useState } from "react"
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context";
 import Wizard from "react-native-wizard";
+import Color from "../../../constants/Colors";
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import FirstStepScreen from "./DataInit/FirstStep";
 import SecondStepScreen from './DataInit/SecondStep';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 type Props = {
   route: ProfileScreenRouteProp;
@@ -95,12 +97,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     marginHorizontal: 20,
-    backgroundColor: 'red',
+    backgroundColor: Color.primary,
     borderRadius: 10,
     width: 100
   },
   btnText: {
-    color: 'white',
+    color: Color.light,
     alignSelf: 'center',
     textAlign: 'center'
   }

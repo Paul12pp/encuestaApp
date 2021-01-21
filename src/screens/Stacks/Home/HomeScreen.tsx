@@ -1,7 +1,7 @@
 import React from "react"
 import { Button, Text, StyleSheet, View, TouchableOpacity } from "react-native"
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
-
+import Color from '../../../constants/Colors';
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
   btns:{
     padding: 10,
     marginTop: 10,
-    backgroundColor: 'red',
+    backgroundColor: Color.primary,
     borderRadius: 10,
     width: 150
   },
   btnText: {
-    color: 'white',
+    color: Color.light,
     alignSelf: 'center',
     textAlign:'center'
   }
