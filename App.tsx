@@ -8,7 +8,7 @@
  * @format
  */
 
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   SafeAreaView,
@@ -21,13 +21,28 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeStackScreen from './src/screens/Stacks/HomeStackScreen';
 import LoginScreen from './src/screens/Stacks/Authentication/LoginScreen';
 import SplashScreen from 'react-native-splash-screen';
+import EncuestaServices from './src/services/EncuestaServices';
 
 const deviceWidth = Dimensions.get('window').width;
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const App = () => {
+
+  const rest = () => {
+    EncuestaServices.getPreguntas()
+      .then((result) => {
+        //console.log(result);
+        if (result) {
+          console.log(result.data)
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   useEffect(() => {
     SplashScreen.hide();
+    rest();
     return () => {
       // Orientation.unlockAllOrientations();
     }
@@ -43,7 +58,7 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
- 
+
 });
 
 export default App;
