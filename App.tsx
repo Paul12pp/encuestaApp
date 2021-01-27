@@ -15,36 +15,70 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-
-import { RootStackParamList } from './src/RouteStack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import NetInfo from "@react-native-community/netinfo";
+import { RootStackParamList } from './src/RouteStack';
+import Storage from './src/constants/Storage';
 import HomeStackScreen from './src/screens/Stacks/HomeStackScreen';
 import LoginScreen from './src/screens/Stacks/Authentication/LoginScreen';
 import SplashScreen from 'react-native-splash-screen';
 import EncuestaServices from './src/services/EncuestaServices';
+import Snackbar from 'react-native-snackbar';
+import Color from './src/constants/Colors';
 
-const deviceWidth = Dimensions.get('window').width;
 const Drawer = createDrawerNavigator<RootStackParamList>();
+const deviceWidth = Dimensions.get('window').width;
 
 const App = () => {
 
   const rest = () => {
-    EncuestaServices.getPreguntas()
-      .then((result) => {
-        //console.log(result);
-        if (result) {
-          console.log(result.data)
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    NetInfo.fetch().then(state => {
+      //if internet valid
+      if (state.isConnected && state.isInternetReachable) {
+        EncuestaServices.getPreguntas()
+          .then((result) => {
+            //console.log(result);
+            if (result) {
+              console.log(result.data)
+              Storage.setItem('preguntas', result.data);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      //else internet not valid
+      Storage.getItem('preguntas')
+        .then((result) => {
+          if (result) {
+            
+          }
+        });
+    })
   }
   useEffect(() => {
     SplashScreen.hide();
+    // Subscribe
+    const unsubscribe = NetInfo.addEventListener(state => {
+      Snackbar.show({
+        text: state.isConnected ? 'Conectado a internet.' : 'Sin conexión a internet.',
+        duration: Snackbar.LENGTH_LONG,
+        action: {
+          text: 'UNDO',
+          textColor: Color.success,
+          onPress: () => { /* Do something. */ },
+        },
+      });
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+    });
+
     rest();
     return () => {
       // Orientation.unlockAllOrientations();
+      // Unsubscribe
+      unsubscribe();
     }
   });
   return (
