@@ -4,6 +4,8 @@ export const ApiRoutes = {
 
     GET_USERS: '/api/?results=20',
     GET_USER: '/api/',
-    GET_PREGUNTAS:'/survey/getpreguntas?id=1'
+    GET_PREGUNTAS:'/survey/getpreguntas?id=1',
+    LOGIN:'/account/authenticate',
+    LOGOUT:''
 }
 

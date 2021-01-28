@@ -27,7 +27,7 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const HomeStackScreen = () => {
     return (
-        <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Navigator initialRouteName="Home" screenOptions={{swipeEnabled:false,gestureEnabled:false}}>
             <Drawer.Screen name="Home" component={HomeScreen} />
             <Drawer.Screen name="Ask" component={AskScreen} />
             <Drawer.Screen name="DataInit" component={DataInitScreen} />

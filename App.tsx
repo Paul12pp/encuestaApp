@@ -31,32 +31,7 @@ const deviceWidth = Dimensions.get('window').width;
 
 const App = () => {
 
-  const rest = () => {
-
-    NetInfo.fetch().then(state => {
-      //if internet valid
-      if (state.isConnected && state.isInternetReachable) {
-        EncuestaServices.getPreguntas()
-          .then((result) => {
-            //console.log(result);
-            if (result) {
-              console.log(result.data)
-              Storage.setItem('preguntas', result.data);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      //else internet not valid
-      Storage.getItem('preguntas')
-        .then((result) => {
-          if (result) {
-            
-          }
-        });
-    })
-  }
+  
   useEffect(() => {
     SplashScreen.hide();
     // Subscribe
@@ -74,7 +49,6 @@ const App = () => {
       console.log("Is connected?", state.isConnected);
     });
 
-    rest();
     return () => {
       // Orientation.unlockAllOrientations();
       // Unsubscribe
@@ -83,7 +57,7 @@ const App = () => {
   });
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Login">
+      <Drawer.Navigator initialRouteName="Login" screenOptions={{swipeEnabled:false, gestureEnabled:false}}> 
         <Drawer.Screen name="Login" component={LoginScreen} />
         <Drawer.Screen name="Home" component={HomeStackScreen} />
       </Drawer.Navigator>

@@ -1,18 +1,50 @@
-import React from "react"
+import React, { useEffect } from "react"
+import NetInfo from "@react-native-community/netinfo";
 import { Button, Text, StyleSheet, View, TouchableOpacity } from "react-native"
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import Color from '../../../constants/Colors';
+import Storage from "../../../constants/Storage";
+import EncuestaServices from "../../../services/EncuestaServices";
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
+  token: string;
 };
 
 const HomeScreen = (props: Props) => {
+  const rest = () => {
+    NetInfo.fetch().then(state => {
+      //if internet valid
+      if (state.isConnected && state.isInternetReachable) {
+        EncuestaServices.getPreguntas(props.token)
+        .then(result=>{
+          Storage.setItem('preguntas',result.data);
+        })
+        .catch(error=>{
+          console.log(error)
+        })
+      }
+      //else internet not valid
+      Storage.getItem('preguntas')
+        .then((result) => {
+          if (result) {
+
+          }
+        });
+
+    })
+  }
+  useEffect(() => {
+    rest();
+    return () => {
+
+    }
+  })
   return (
     <View style={styles.content}>
       <TouchableOpacity
         style={styles.btns}
-        onPress={() => props.navigation.navigate('DataInit')}
+        onPress={() => props.navigation.navigate('DataInit',{token:props.token})}
       >
         <Text style={styles.btnText}>Iniciar nueva encuesta</Text>
       </TouchableOpacity>
@@ -29,7 +61,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1, alignItems: 'center', justifyContent: 'center'
   },
-  btns:{
+  btns: {
     padding: 10,
     marginTop: 10,
     backgroundColor: Color.primary,
@@ -39,7 +71,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: Color.light,
     alignSelf: 'center',
-    textAlign:'center'
+    textAlign: 'center'
   }
 })
 export default HomeScreen;

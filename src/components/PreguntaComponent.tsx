@@ -30,6 +30,7 @@ class PreguntaComponent extends PureComponent<Props> {
         this.items = this.props.data.opciones.map(({ Id, Description }) => {
             return { label: Description, value: Id };
         })
+        console.log('pregunta', props.data);
     }
     render() {
         return (
@@ -57,27 +58,6 @@ class PreguntaComponent extends PureComponent<Props> {
                     }}
                     items={this.items}
                 />
-                {/* <DropDownPicker
-                        containerStyle={styles.dropdownStyle}
-                        itemStyle={{
-                            justifyContent: 'flex-start'
-                        }}
-                        labelStyle={{
-                            fontSize: 14,
-                            textAlign: 'left',
-                            color: Color.dark
-                        }}
-                        activeLabelStyle={{ color: 'red' }}
-                        style={{ borderColor: Color.dark, backgroundColor: Color.light }}
-                        items={this.items}
-                        defaultValue={null}
-                        // onChangeItem={item => setCentro((item.value))}
-                        placeholder="Opción"
-                        placeholderStyle={{ color: 'gray' }}
-                        searchable={true}
-                        searchablePlaceholder="Buscar"
-                        searchablePlaceholderTextColor={Color.dark}
-                    /> */}
             </View>
         );
     }
@@ -97,6 +77,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         //paddingBottom: 5,
         //marginTop:10
+        color:Color.dark
     },
     description: {
         paddingTop: 2,
@@ -116,16 +97,20 @@ const styles = StyleSheet.create({
     },
     pregunta: {
         alignSelf: 'center',
-        marginTop: 5
+        marginTop: 5,
+        marginHorizontal:15,
+        marginBottom:5
     }
 })
 const customPickerStyles = StyleSheet.create({
     inputIOS: {
+        width:deviceWidth/1.2,
+        alignSelf:'center',
         fontSize: 14,
         paddingVertical: 10,
         paddingHorizontal: 12,
         borderWidth: 1,
-        borderColor: 'green',
+        borderColor: 'gray',
         borderRadius: 8,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon

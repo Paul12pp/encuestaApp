@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
+  token:string;
 };
 
 const DataInitScreen = (props: Props) => {
@@ -43,7 +44,7 @@ const DataInitScreen = (props: Props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btns}
-            onPress={() => props.navigation.navigate('Ask')}
+            onPress={() => props.navigation.navigate('Ask',{token:props.token})}
           >
             <Text style={styles.btnText}>Siguiente</Text>
           </TouchableOpacity>

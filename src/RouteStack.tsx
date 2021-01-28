@@ -5,9 +5,9 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 export type RootStackParamList = {
     HomeStackScreen:undefined;
     AuthenticationStackScreen:undefined;
-    Home: undefined;
-    DataInit: undefined;
-    Ask:undefined;
+    Home: {token:string};
+    DataInit: {token:string};
+    Ask:{token:string};
     Login:undefined;
     Splash: undefined;
     Stack: undefined;
