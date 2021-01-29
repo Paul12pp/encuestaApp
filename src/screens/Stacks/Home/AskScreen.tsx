@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Button, Dimensions, Platform, SafeAreaView, StyleSheet, Text, View } from "react-native"
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import {FlatList, Dimensions, SafeAreaView, StyleSheet, Text, Platform } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Storage from "../../../constants/Storage";
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import PreguntaComponent from '../../../components/PreguntaComponent';
@@ -9,7 +9,7 @@ import Color from '../../../constants/Colors';
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
-  token:string;
+  token: string;
 };
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -19,29 +19,30 @@ const AskScreen = (props: Props) => {
     Storage.getItem('preguntas').then((result) => {
       //console.log('listado',result);  
       setListado(result);
-      console.log('data',result)
+      console.log('data', result)
     })
     console.log(listado);
   }, []);
   return (
-    
+
     <SafeAreaView style={styles.content}>
-      <Text>Encuesta</Text>
+      <Text style={styles.title}>Encuesta</Text>
       {/* <PreguntaComponent data={listado[0]} /> */}
       {/* { */}
-      {listado&& 
+      {listado &&
         <FlatList style={styles.list}
-        data={listado}
-        initialNumToRender={7}
-        onEndReached={() => console.log('el final')}
-        renderItem={({ item, index }) =>
-          <PreguntaComponent data={item} />
-        }
-        keyExtractor={(item, index) => index.toString()}
-      />}
-     <TouchableOpacity
+          data={listado}
+          initialNumToRender={7}
+          onEndReached={() => console.log('el final')}
+          contentContainerStyle={{flexGrow:1}}
+          renderItem={({ item, index }) =>
+            <PreguntaComponent key={index} data={item} />
+          }
+          keyExtractor={(item, index) => index.toString()}
+        />}
+      <TouchableOpacity
         style={styles.btns}
-        onPress={() => props.navigation.navigate('Home',{token:props.token})}
+        onPress={() => props.navigation.navigate('Home', { token: props.token })}
       >
         <Text style={styles.btnText}>Enviar encuesta</Text>
       </TouchableOpacity>
@@ -56,24 +57,30 @@ const styles = StyleSheet.create({
     // alignSelf:'center'
     // backgroundColor: Color.primary
   },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
   list: {
-    width:deviceWidth,
+    flex: 1,
+    // width: deviceWidth,
+    // backgroundColor: Color.warning
     // height:deviceHeight,
     // marginBottom: Platform.OS === 'android' ? 30 : 1,
     // backgroundColor:Color.danger
   },
-  btns:{
+  btns: {
     padding: 10,
     marginTop: 10,
     backgroundColor: Color.primary,
     borderRadius: 10,
     width: 150,
-    marginBottom:5
+    marginBottom: 5
   },
   btnText: {
     color: Color.light,
     alignSelf: 'center',
-    textAlign:'center'
+    textAlign: 'center'
   }
 })
 export default AskScreen;

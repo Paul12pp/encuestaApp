@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import NetInfo from "@react-native-community/netinfo";
-import { Button, Text, StyleSheet, View, TouchableOpacity } from "react-native"
+import { Text, StyleSheet, View, TouchableOpacity } from "react-native"
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import Color from '../../../constants/Colors';
 import Storage from "../../../constants/Storage";
@@ -17,40 +17,35 @@ const HomeScreen = (props: Props) => {
       //if internet valid
       if (state.isConnected && state.isInternetReachable) {
         EncuestaServices.getPreguntas(props.token)
-        .then(result=>{
-          Storage.setItem('preguntas',result.data);
-        })
-        .catch(error=>{
-          console.log(error)
-        })
+          .then(result => {
+            Storage.setItem('preguntas', result.data);
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
-      //else internet not valid
-      Storage.getItem('preguntas')
-        .then((result) => {
-          if (result) {
-
-          }
-        });
-
     })
+  }
+  const logout = () => {
+    Storage.removeItem('usuario');
+    props.navigation.navigate('Login')
   }
   useEffect(() => {
     rest();
     return () => {
-
     }
   })
   return (
     <View style={styles.content}>
       <TouchableOpacity
         style={styles.btns}
-        onPress={() => props.navigation.navigate('DataInit',{token:props.token})}
+        onPress={() => props.navigation.navigate('DataInit', { token: props.token })}
       >
         <Text style={styles.btnText}>Iniciar nueva encuesta</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.btns}
-        onPress={() => props.navigation.navigate('Login')}
+        onPress={logout}
       >
         <Text style={styles.btnText}>Cerrar sesión</Text>
       </TouchableOpacity>

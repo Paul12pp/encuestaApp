@@ -65,8 +65,6 @@ class PreguntaComponent extends PureComponent<Props> {
 
 const styles = StyleSheet.create({
     item: {
-        // backgroundColor: 'white',
-        // paddingHorizontal: 20,
         paddingVertical: 5,
         marginHorizontal: 2,
         flexDirection: 'column',
@@ -75,8 +73,6 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         paddingHorizontal: 10,
-        //paddingBottom: 5,
-        //marginTop:10
         color:Color.dark
     },
     description: {
@@ -128,44 +124,6 @@ const customPickerStyles = StyleSheet.create({
         paddingRight: 30, // to ensure the text is never behind the icon
     }
 
-});
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-    underline: { borderTopWidth: 1 },
-    inputAndroid: {
-        fontSize: 16,
-        marginHorizontal: 4,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-    icon: {
-        position: 'absolute',
-        backgroundColor: 'transparent',
-        borderTopWidth: 5,
-        borderTopColor: '#00000099',
-        borderRightWidth: 5,
-        borderRightColor: 'transparent',
-        borderLeftWidth: 5,
-        borderLeftColor: 'transparent',
-        width: 0,
-        height: 0,
-        top: 20,
-        right: 15,
-    },
 });
 
 export default PreguntaComponent;

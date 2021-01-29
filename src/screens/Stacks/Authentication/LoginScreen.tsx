@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Dimensions, StyleSheet, Text, TouchableOpacity, View, Image, ActivityIndicator } from "react-native"
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Image, ActivityIndicator } from "react-native"
 import { TextInput } from "react-native-paper";
 import NetInfo from "@react-native-community/netinfo";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -20,7 +20,6 @@ const LoginScreen = (props: Props) => {
   const [pass, setPass] = useState('');
   const [indicator, setIndicator] = useState(false);
   const login = () => {
-    // props.navigation.navigate('Home')
     NetInfo.fetch().then(state => {
       //if internet valid
       if (state.isConnected && state.isInternetReachable) {
@@ -32,6 +31,8 @@ const LoginScreen = (props: Props) => {
               setIndicator(false);
               console.log(result)
               Storage.setItem('usuario', result.data);
+              setUser('');
+              setPass('');
               props.navigation.navigate('Home',{token:result.data.token})
             }
           })
