@@ -12,15 +12,15 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		20157D8525B093FE00663E9B /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
-		21C4E4C76372BF63AB44B28C /* libPods-encuestaApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E640296C77E60456E0EC1434 /* libPods-encuestaApp-tvOS.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* encuestaAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* encuestaAppTests.m */; };
-		401141AAB0E49C9FEE3114C0 /* libPods-encuestaApp-encuestaAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 913EEFDE9064F8AC4A3EC16E /* libPods-encuestaApp-encuestaAppTests.a */; };
-		5D30BDA5E6B19C1EE05BE061 /* libPods-encuestaApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79234104C6002E64975D9840 /* libPods-encuestaApp-tvOSTests.a */; };
+		4BBF2CA7ABE6329AD638A68F /* libPods-encuestaApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0AAA6CFE48ECE788A02EAE /* libPods-encuestaApp-tvOSTests.a */; };
+		71655A255F6371C70CF8FAD9 /* libPods-encuestaApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D970CA222796ABFE0529C70 /* libPods-encuestaApp.a */; };
+		7FD444097154EFDD4EEFFC6D /* libPods-encuestaApp-encuestaAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1884168313DCD8DFA9D9563 /* libPods-encuestaApp-encuestaAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		F98FCBE74508C8104BCA4C6B /* libPods-encuestaApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 578142FF17F3D1B5DDCBDC52 /* libPods-encuestaApp.a */; };
+		CA55DA983F786EA33AD1EE6F /* libPods-encuestaApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C794E74C1EB2393D6173F7D8 /* libPods-encuestaApp-tvOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +46,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* encuestaAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = encuestaAppTests.m; sourceTree = "<group>"; };
 		0656177CF5DC4FF79DE6F0DA /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		0A0AAA6CFE48ECE788A02EAE /* libPods-encuestaApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB85A1833474770B3563D91 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* encuestaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = encuestaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = encuestaApp/AppDelegate.h; sourceTree = "<group>"; };
@@ -54,35 +55,34 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = encuestaApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = encuestaApp/main.m; sourceTree = "<group>"; };
 		1A6C00F2C5554566A941CBAB /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		22F9180B3B58E9E390D77C04 /* Pods-encuestaApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp/Pods-encuestaApp.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* encuestaApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "encuestaApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* encuestaApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "encuestaApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3267E1F5732A4AF5A9B6A4A0 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
-		345D6C3D79667C085F868698 /* Pods-encuestaApp-encuestaAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-encuestaAppTests.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp-encuestaAppTests/Pods-encuestaApp-encuestaAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		383D142F1D2542EE80BBF460 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		3C774481B363ECC7DE1230D4 /* Pods-encuestaApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOSTests/Pods-encuestaApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		45834C958F0B48B8B9B1C7E4 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		578142FF17F3D1B5DDCBDC52 /* libPods-encuestaApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		59380C2097DA9B80BF308F88 /* Pods-encuestaApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp/Pods-encuestaApp.release.xcconfig"; sourceTree = "<group>"; };
-		79234104C6002E64975D9840 /* libPods-encuestaApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7873BF43DCBD37B8FA39326E /* Pods-encuestaApp-encuestaAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-encuestaAppTests.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp-encuestaAppTests/Pods-encuestaApp-encuestaAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7EBDB3402187453192299BBB /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = encuestaApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		829D96E62A3141FC960F7169 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		87A52EA56D332CE88158C316 /* Pods-encuestaApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOS/Pods-encuestaApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		83BEE2F967CDCE94EF5DDECC /* Pods-encuestaApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp/Pods-encuestaApp.release.xcconfig"; sourceTree = "<group>"; };
 		8CF4FE9FE9F748A48EBA7138 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		8D8E531FF4DE45B3BE4BB5D9 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		913EEFDE9064F8AC4A3EC16E /* libPods-encuestaApp-encuestaAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp-encuestaAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D970CA222796ABFE0529C70 /* libPods-encuestaApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		936239509996313C0BFFBBD3 /* Pods-encuestaApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOS/Pods-encuestaApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		9F347FFDC73D45E1A0F36D58 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		A5965E77B0B149E6A255552D /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		B0B3BFA55A454C3D877835C2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
-		C19CD7359CD9E598C859AD90 /* Pods-encuestaApp-encuestaAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-encuestaAppTests.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp-encuestaAppTests/Pods-encuestaApp-encuestaAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		BF34EC8F0F987521D773BD5B /* Pods-encuestaApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOS/Pods-encuestaApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		C794E74C1EB2393D6173F7D8 /* libPods-encuestaApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C95F77EB2FF6440D90BB3511 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		D1AE38B02A097F86E045BA97 /* Pods-encuestaApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOS/Pods-encuestaApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		E46B6A26359B32D3EAD9E7D8 /* Pods-encuestaApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOSTests/Pods-encuestaApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		E640296C77E60456E0EC1434 /* libPods-encuestaApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA3C41F064A95EF6FB214229 /* Pods-encuestaApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOSTests/Pods-encuestaApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		E119D2BA999DA09C088C1E93 /* Pods-encuestaApp-encuestaAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-encuestaAppTests.release.xcconfig"; path = "Target Support Files/Pods-encuestaApp-encuestaAppTests/Pods-encuestaApp-encuestaAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		EAAAEC8730E24B4CB53F587E /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F67CF1BD4405952DF6C3AE8B /* Pods-encuestaApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp-tvOSTests/Pods-encuestaApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F1181A760F42083D91F1F80E /* Pods-encuestaApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encuestaApp.debug.xcconfig"; path = "Target Support Files/Pods-encuestaApp/Pods-encuestaApp.debug.xcconfig"; sourceTree = "<group>"; };
+		F1884168313DCD8DFA9D9563 /* libPods-encuestaApp-encuestaAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-encuestaApp-encuestaAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9674BDED8BE4B08AACFD521 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				401141AAB0E49C9FEE3114C0 /* libPods-encuestaApp-encuestaAppTests.a in Frameworks */,
+				7FD444097154EFDD4EEFFC6D /* libPods-encuestaApp-encuestaAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,7 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F98FCBE74508C8104BCA4C6B /* libPods-encuestaApp.a in Frameworks */,
+				71655A255F6371C70CF8FAD9 /* libPods-encuestaApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21C4E4C76372BF63AB44B28C /* libPods-encuestaApp-tvOS.a in Frameworks */,
+				CA55DA983F786EA33AD1EE6F /* libPods-encuestaApp-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D30BDA5E6B19C1EE05BE061 /* libPods-encuestaApp-tvOSTests.a in Frameworks */,
+				4BBF2CA7ABE6329AD638A68F /* libPods-encuestaApp-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,14 +142,14 @@
 		0DFD97158BF41C47ECD632FB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				22F9180B3B58E9E390D77C04 /* Pods-encuestaApp.debug.xcconfig */,
-				59380C2097DA9B80BF308F88 /* Pods-encuestaApp.release.xcconfig */,
-				345D6C3D79667C085F868698 /* Pods-encuestaApp-encuestaAppTests.debug.xcconfig */,
-				C19CD7359CD9E598C859AD90 /* Pods-encuestaApp-encuestaAppTests.release.xcconfig */,
-				87A52EA56D332CE88158C316 /* Pods-encuestaApp-tvOS.debug.xcconfig */,
-				D1AE38B02A097F86E045BA97 /* Pods-encuestaApp-tvOS.release.xcconfig */,
-				F67CF1BD4405952DF6C3AE8B /* Pods-encuestaApp-tvOSTests.debug.xcconfig */,
-				E46B6A26359B32D3EAD9E7D8 /* Pods-encuestaApp-tvOSTests.release.xcconfig */,
+				F1181A760F42083D91F1F80E /* Pods-encuestaApp.debug.xcconfig */,
+				83BEE2F967CDCE94EF5DDECC /* Pods-encuestaApp.release.xcconfig */,
+				7873BF43DCBD37B8FA39326E /* Pods-encuestaApp-encuestaAppTests.debug.xcconfig */,
+				E119D2BA999DA09C088C1E93 /* Pods-encuestaApp-encuestaAppTests.release.xcconfig */,
+				936239509996313C0BFFBBD3 /* Pods-encuestaApp-tvOS.debug.xcconfig */,
+				BF34EC8F0F987521D773BD5B /* Pods-encuestaApp-tvOS.release.xcconfig */,
+				3C774481B363ECC7DE1230D4 /* Pods-encuestaApp-tvOSTests.debug.xcconfig */,
+				DA3C41F064A95EF6FB214229 /* Pods-encuestaApp-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -173,10 +173,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				578142FF17F3D1B5DDCBDC52 /* libPods-encuestaApp.a */,
-				913EEFDE9064F8AC4A3EC16E /* libPods-encuestaApp-encuestaAppTests.a */,
-				E640296C77E60456E0EC1434 /* libPods-encuestaApp-tvOS.a */,
-				79234104C6002E64975D9840 /* libPods-encuestaApp-tvOSTests.a */,
+				8D970CA222796ABFE0529C70 /* libPods-encuestaApp.a */,
+				F1884168313DCD8DFA9D9563 /* libPods-encuestaApp-encuestaAppTests.a */,
+				C794E74C1EB2393D6173F7D8 /* libPods-encuestaApp-tvOS.a */,
+				0A0AAA6CFE48ECE788A02EAE /* libPods-encuestaApp-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -198,6 +198,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				AF9B24258675404FA024B13E /* Resources */,
 				0DFD97158BF41C47ECD632FB /* Pods */,
+				846BAA8B25C862C300F1A20C /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -213,6 +214,13 @@
 				2D02E4901E0B4A5D006451C7 /* encuestaApp-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		846BAA8B25C862C300F1A20C /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		AF9B24258675404FA024B13E /* Resources */ = {
@@ -245,11 +253,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "encuestaAppTests" */;
 			buildPhases = (
-				FFAE7B289D1A22D441A15BC7 /* [CP] Check Pods Manifest.lock */,
+				FBB592395CDA9B79ACB2F085 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				EC63BD80A494A1F8D198ADE0 /* [CP] Copy Pods Resources */,
+				C0126CF1B040F74C15DAA302 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -265,13 +273,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "encuestaApp" */;
 			buildPhases = (
-				AF2516351FDD6A2AFFD96D05 /* [CP] Check Pods Manifest.lock */,
+				06B9A785260D9491303FF648 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				C8FFDBA9F3F71F68DBFD89BD /* [CP] Copy Pods Resources */,
+				524279544FA0B867E87F7BCC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -286,7 +294,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "encuestaApp-tvOS" */;
 			buildPhases = (
-				09C9E848922774243BF809F7 /* [CP] Check Pods Manifest.lock */,
+				BE43BDDD6E85472D31FD208F /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -306,7 +314,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "encuestaApp-tvOSTests" */;
 			buildPhases = (
-				CE68BD8E7D652B8748D1198E /* [CP] Check Pods Manifest.lock */,
+				38930FD69D811E5B350A86B0 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -334,6 +342,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = T35Q5W5WGS;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -418,43 +427,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		09C9E848922774243BF809F7 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-encuestaApp-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		AF2516351FDD6A2AFFD96D05 /* [CP] Check Pods Manifest.lock */ = {
+		06B9A785260D9491303FF648 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -476,7 +449,43 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C8FFDBA9F3F71F68DBFD89BD /* [CP] Copy Pods Resources */ = {
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		38930FD69D811E5B350A86B0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-encuestaApp-tvOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		524279544FA0B867E87F7BCC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -526,7 +535,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-encuestaApp/Pods-encuestaApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CE68BD8E7D652B8748D1198E /* [CP] Check Pods Manifest.lock */ = {
+		BE43BDDD6E85472D31FD208F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -541,14 +550,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-encuestaApp-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-encuestaApp-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EC63BD80A494A1F8D198ADE0 /* [CP] Copy Pods Resources */ = {
+		C0126CF1B040F74C15DAA302 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -598,6 +607,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-encuestaApp-encuestaAppTests/Pods-encuestaApp-encuestaAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		FBB592395CDA9B79ACB2F085 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-encuestaApp-encuestaAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -634,28 +665,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		FFAE7B289D1A22D441A15BC7 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-encuestaApp-encuestaAppTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -713,16 +722,18 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 345D6C3D79667C085F868698 /* Pods-encuestaApp-encuestaAppTests.debug.xcconfig */;
+			baseConfigurationReference = 7873BF43DCBD37B8FA39326E /* Pods-encuestaApp-encuestaAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = encuestaAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -736,13 +747,15 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C19CD7359CD9E598C859AD90 /* Pods-encuestaApp-encuestaAppTests.release.xcconfig */;
+			baseConfigurationReference = E119D2BA999DA09C088C1E93 /* Pods-encuestaApp-encuestaAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = encuestaAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -756,14 +769,16 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22F9180B3B58E9E390D77C04 /* Pods-encuestaApp.debug.xcconfig */;
+			baseConfigurationReference = F1181A760F42083D91F1F80E /* Pods-encuestaApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T35Q5W5WGS;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = encuestaApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -781,13 +796,15 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59380C2097DA9B80BF308F88 /* Pods-encuestaApp.release.xcconfig */;
+			baseConfigurationReference = 83BEE2F967CDCE94EF5DDECC /* Pods-encuestaApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T35Q5W5WGS;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = encuestaApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -804,7 +821,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87A52EA56D332CE88158C316 /* Pods-encuestaApp-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 936239509996313C0BFFBBD3 /* Pods-encuestaApp-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -815,8 +832,10 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "encuestaApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -832,7 +851,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1AE38B02A097F86E045BA97 /* Pods-encuestaApp-tvOS.release.xcconfig */;
+			baseConfigurationReference = BF34EC8F0F987521D773BD5B /* Pods-encuestaApp-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -843,8 +862,10 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "encuestaApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -860,7 +881,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F67CF1BD4405952DF6C3AE8B /* Pods-encuestaApp-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 3C774481B363ECC7DE1230D4 /* Pods-encuestaApp-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -870,8 +891,10 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "encuestaApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -887,7 +910,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E46B6A26359B32D3EAD9E7D8 /* Pods-encuestaApp-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = DA3C41F064A95EF6FB214229 /* Pods-encuestaApp-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -897,8 +920,10 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "encuestaApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

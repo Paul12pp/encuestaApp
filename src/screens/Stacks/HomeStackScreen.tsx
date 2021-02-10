@@ -8,29 +8,37 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import {
-    SafeAreaView,
     StyleSheet,
-    Dimensions,
 } from 'react-native';
 
-import { RootStackParamList } from '../../RouteStack';
+import { HomeStackParamList, ProfileScreenNavigationProp, ProfileScreenRouteProp, RootStackParamList } from '../../RouteStack';
 import HomeScreen from './Home/HomeScreen';
 import AskScreen from './Home/AskScreen';
 import DataInitScreen from './Home/DataInitScreen';
+import SecondStepScreen from './Home/DataInit/SecondStep';
+import FirstStepScreen from './Home/DataInit/FirstStep';
 
-declare const global: { HermesInternal: null | {} };
-const deviceWidth = Dimensions.get('window').width;
-const Drawer = createDrawerNavigator<RootStackParamList>();
+type Props = {
+    route: ProfileScreenRouteProp;
+    navigation: ProfileScreenNavigationProp;
+};
+  
+const Drawer = createDrawerNavigator<HomeStackParamList>();
 
-const HomeStackScreen = () => {
+const HomeStackScreen = (props:Props) => {
+    useEffect(()=>{
+        console.log('stack',props.route.params)
+    },[])
     return (
         <Drawer.Navigator initialRouteName="Home" screenOptions={{swipeEnabled:false,gestureEnabled:false}}>
-            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Home" component={HomeScreen} initialParams={{token:props.route.params.token}} />
             <Drawer.Screen name="Ask" component={AskScreen} />
             <Drawer.Screen name="DataInit" component={DataInitScreen} />
+            <Drawer.Screen name="SecondStep" component={SecondStepScreen} />
+            <Drawer.Screen name="FirstStep" component={FirstStepScreen} />
         </Drawer.Navigator>
     );
 };

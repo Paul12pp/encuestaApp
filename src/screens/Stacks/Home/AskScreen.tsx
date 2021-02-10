@@ -1,34 +1,111 @@
 import React, { useEffect, useState } from "react"
-import {FlatList, Dimensions, SafeAreaView, StyleSheet, Text, Platform } from "react-native"
+import {FlatList, Dimensions, SafeAreaView, StyleSheet, Text, Platform, Alert, ToastAndroid, ActivityIndicator } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import Storage from "../../../constants/Storage";
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import PreguntaComponent from '../../../components/PreguntaComponent';
 import Color from '../../../constants/Colors';
+import EncuestaServices from "../../../services/EncuestaServices";
+import Queue from "../../../constants/Queue";
+import { TextInput } from "react-native-paper";
 
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
-  token: string;
 };
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 const AskScreen = (props: Props) => {
   const [listado, setListado] = useState([]);
-  useEffect(() => {
-    Storage.getItem('preguntas').then((result) => {
-      //console.log('listado',result);  
-      setListado(result);
-      console.log('data', result)
+  const [values,setValues]=useState<any>([]);
+  const [valid, setValid]=useState(false);
+  const [indicator, setIndicator] = useState(false);
+  const [incidentes, setIncidentes] = useState('');
+
+  const press=()=>{
+    setIndicator(true);
+    const data={
+      ...props.route.params.vivienda,
+      EncuestaId:1,
+      Estudiantes:props.route.params.estudiantes,
+      respuestas:values,
+      Incidentes:incidentes
+    }
+    EncuestaServices.postRespuestas(props.route.params.token,data)
+    .then(result=>{
+      Platform.OS=='ios' ? Alert.alert('Envuesta enviada','Se ha enviado satisfactoriamente la encuesta.') : ToastAndroid.show("Encuesta enviada satisfactoriamente.", ToastAndroid.LONG);
+      props.navigation.navigate('HomeStackScreen',{screen:'Home',params:{ token: props.route.params.token }})
+      setIndicator(false);
     })
-    console.log(listado);
+    .catch(error=>{
+      console.log('error enviando', error);
+      if(error="[Error: Network Error]"){
+        console.log('network')
+        let cola = new Queue();
+        cola.addElement(data);
+        Alert.alert('Sin conexión','Encuesta guardada localmente para futura sincronización.',
+        [
+          {
+            text: 'Ok',
+            onPress: ()=> props.navigation.navigate('HomeStackScreen',{screen:'Home',params:{ token: props.route.params.token }})
+          }
+        ]);
+      }
+      if(error.response){
+
+        let cola = new Queue();
+        cola.addElement(data);
+        console.log(error.response.data);
+        if(error.response.status===401){
+          Alert.alert('Token vencido', 'Inice sesión con Internet.',
+          [
+              {
+                text: 'Ok',
+                onPress: logout
+              }
+          ]);
+        }
+        console.log(error.response.headers);
+      }
+      setIndicator(false);
+    })
+    console.log(data);
+  }
+  const recibeData=(value:any)=>{
+    console.log('recibido', value);
+    const temp = values;
+    temp[value.index]=value.data;
+    setValues(temp);
+    console.log('in state',values)
+    let valid = values.filter((element:any)=>isEmpty(element))
+    setValid(valid.length>0?true:false);
+    console.log('otro valid', valid);
+    console.log(valid)
+  }
+  const isEmpty = (obj: any) => {
+    for (var key in obj) {
+      // console.log(obj)
+      if (obj[key] == null || obj[key] == "")
+        return true;
+    }
+    return false;
+  }
+  const logout=()=>{
+    Storage.removeItem('usuario');
+    props.navigation.navigate('Login')
+  }
+  useEffect(() => {
+    console.log(props.route.params.vivienda)
+    Storage.getItem('preguntas').then((result) => {
+      // console.log('listado',result);  
+      setListado(result);
+    })
   }, []);
   return (
 
     <SafeAreaView style={styles.content}>
       <Text style={styles.title}>Encuesta</Text>
-      {/* <PreguntaComponent data={listado[0]} /> */}
-      {/* { */}
       {listado &&
         <FlatList style={styles.list}
           data={listado}
@@ -36,16 +113,38 @@ const AskScreen = (props: Props) => {
           onEndReached={() => console.log('el final')}
           contentContainerStyle={{flexGrow:1}}
           renderItem={({ item, index }) =>
-            <PreguntaComponent key={index} data={item} />
+            <PreguntaComponent key={index} enviaData={recibeData} data={item} value={index} estudiantes={props.route.params.estudiantes} />
           }
           keyExtractor={(item, index) => index.toString()}
         />}
+        <TextInput
+                    mode="outlined"
+                    style={styles.inputs}
+                    label="Incidentes"
+                    value={incidentes}
+                    multiline={true}
+                    numberOfLines={3}
+                    onChangeText={(text:any) => setIncidentes(text)}
+                    theme={{colors: {primary: Color.primary}}}
+                    left={
+                        <TextInput.Icon
+                            name={() => <Icon
+                                name='comment'
+                                size={24}
+                                color={Color.dark}
+                            />} 
+                            onPress={() => { }}
+                        />
+                    }
+                />
       <TouchableOpacity
-        style={styles.btns}
-        onPress={() => props.navigation.navigate('Home', { token: props.token })}
+        disabled={indicator}
+        style={[styles.btns,{backgroundColor:valid?Color.secondary:Color.primary}]}
+        onPress={press}
       >
         <Text style={styles.btnText}>Enviar encuesta</Text>
       </TouchableOpacity>
+      <ActivityIndicator animating={indicator} style={styles.indicator} size="small" color={Color.success} />
     </SafeAreaView>
   )
 }
@@ -81,6 +180,14 @@ const styles = StyleSheet.create({
     color: Color.light,
     alignSelf: 'center',
     textAlign: 'center'
-  }
+  },
+  indicator:{
+    marginTop:10
+  },
+  inputs: {
+    width: deviceWidth / 1.2,
+    marginHorizontal: 10,
+    marginTop: 5
+  },
 })
 export default AskScreen;

@@ -1,29 +1,66 @@
-import React, { useRef, useState } from "react"
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context";
+import { CommonActions } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react"
+import {  StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Wizard from "react-native-wizard";
 import Color from "../../../constants/Colors";
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
+
 import FirstStepScreen from "./DataInit/FirstStep";
 import SecondStepScreen from './DataInit/SecondStep';
-import Icon from "react-native-vector-icons/FontAwesome";
 
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
-  token:string;
 };
 
 const DataInitScreen = (props: Props) => {
-  const wizard = useRef();
+  let wizard = useRef();
   const [isFirstStep, setIsFirstStep] = useState(true)
   const [isLastStep, setIsLastStep] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
+  const [firstEmpty, setFirstEmpty]=useState(false);
+  const [secondEmpty, setSecondEmpty]=useState(false);
+  const [estudiantes,setEstudiantes]=useState([]);
+  const [vivienda,setVivienda]=useState({});
+  const firstIsEmpty=(value:any)=>{
+    console.log('parent one recibo', value.empty);
+    setFirstEmpty(value.empty);
+    setVivienda(value.vivienda);
+    // console.log(props.route.params)
+  }
+  const secondIsEmpty=(value:any)=>{
+    console.log('parent second recibo', value);
+    setSecondEmpty(value.empty);
+    setEstudiantes(value.estudiantes);
+    console.log('lo recibido',value.estudiantes)
+    console.log('in state',estudiantes);
+  }
+  const initialState=()=>{
+    setIsFirstStep(true);
+    setIsLastStep(false);
+    setCurrentStep(0);
+    setFirstEmpty(false);
+    setSecondEmpty(false);
+    setEstudiantes([]);
+  }
+  const goAsk=()=>{
+    // initialState();
+    // const resetAction = props.navigation.reset();
+    // props.navigation.dispatch({});
+    props.navigation.dispatch(CommonActions.reset({
+      index: 0,
+      routes: [
+        { name: 'Ask',params:{token:props.route.params.token,estudiantes:estudiantes, vivienda:vivienda}},
+      ],
+    }))
+    // props.navigation.navigate('HomeStackScreen',{screen:'Ask',params:{token:props.route.params.token,estudiantes:estudiantes, vivienda:vivienda}})
+  }
   const stepList = [
     {
-      content: <FirstStepScreen>
+      content: <FirstStepScreen navigation={props.navigation} onIsEmptyChange={firstIsEmpty} token={props.route.params.token}>
         <TouchableOpacity
-          style={styles.btns}
+          disabled={firstEmpty}
+          style={[styles.btns,{backgroundColor:firstEmpty?Color.secondary:Color.primary}]}
           onPress={() => wizard.current.next()}
         >
           <Text style={styles.btnText}>Siguiente</Text>
@@ -31,7 +68,7 @@ const DataInitScreen = (props: Props) => {
       </FirstStepScreen>
     },
     {
-      content: <SecondStepScreen>
+      content: <SecondStepScreen onIsEmptyChange={secondIsEmpty} token={props.route.params.token}>
         <View style={{
           justifyContent: "space-between",
           flexDirection: "row",
@@ -43,31 +80,22 @@ const DataInitScreen = (props: Props) => {
             <Text style={styles.btnText}>Atras</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.btns}
-            onPress={() => props.navigation.navigate('Ask',{token:props.token})}
+            disabled={secondEmpty}
+            style={[styles.btns,{backgroundColor:secondEmpty?Color.secondary:Color.primary}]}
+            onPress={goAsk}
           >
             <Text style={styles.btnText}>Siguiente</Text>
           </TouchableOpacity>
         </View>
       </SecondStepScreen>
     }
-  ]
+  ];
+  useEffect(()=>{
+    console.log('dataInit')
+    console.log(props.route.params)
+  })
   return (
     <View>
-      {/* <SafeAreaView>
-        <View
-          style={{
-            justifyContent: "space-between",
-            flexDirection: "row",
-            backgroundColor: "#FFF",
-            borderBottomColor: "#dedede",
-            borderBottomWidth: 1,
-          }}>
-          <Button disabled={isFirstStep} title="Prev" onPress={() => wizard.current.prev()} />
-          <Text>{currentStep + 1}. Step</Text>
-          <Button disabled={isLastStep} title="Next" onPress={() => wizard.current.next()} />
-        </View>
-      </SafeAreaView> */}
       <View style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <Wizard
           ref={wizard}
@@ -82,10 +110,6 @@ const DataInitScreen = (props: Props) => {
             setCurrentStep(currentStep);
           }}
         />
-        {/* <Button
-          onPress={() => props.navigation.navigate('Home')}
-          title="Go to home"
-        /> */}
       </View>
     </View>
   )

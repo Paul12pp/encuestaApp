@@ -1,24 +1,27 @@
 import 'react-native-gesture-handler';
-import {  RouteProp } from '@react-navigation/native';
+import { NavigatorScreenParams, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 
 export type RootStackParamList = {
-    HomeStackScreen:undefined;
-    AuthenticationStackScreen:undefined;
-    Home: {token:string};
-    DataInit: {token:string};
-    Ask:{token:string};
-    Login:undefined;
+    HomeStackScreen: NavigatorScreenParams<HomeStackParamList>;
+    AuthenticationStackScreen: undefined;
+    Login: undefined;
     Splash: undefined;
     Stack: undefined;
-    Details: { item: any }|undefined;
 };
+export type HomeStackParamList={
+    Home: { token: string};
+    DataInit: {token:string;};
+    SecondStep: undefined;
+    FirstStep: undefined;
+    Ask: { token: string,estudiantes:any[],vivienda:any };
+}
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 
-export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'HomeStackScreen'>;
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
-    'Home'
+    'HomeStackScreen'
 >;

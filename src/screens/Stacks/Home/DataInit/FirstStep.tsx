@@ -1,27 +1,108 @@
-import React, { useState } from "react"
-import { Dimensions, StyleSheet, Text, View } from "react-native"
+import React, { useEffect, useState } from "react"
+import { Alert, Dimensions, StyleSheet, Text } from "react-native"
 import { TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { ScrollView } from "react-native-gesture-handler";
-
+import NetInfo from "@react-native-community/netinfo";
+import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Color from "../../../../constants/Colors";
+import EncuestaServices from "../../../../services/EncuestaServices";
+import Storage from "../../../../constants/Storage";
+import { Parentesco } from "../../../../constants/interfaces";
 
 type Props = {
     // route: ProfileScreenRouteProp;
     // navigation: ProfileScreenNavigationProp;
-
+    onIsEmptyChange: any;
+    token: string;
 };
+interface Vivienda {
+    nombre: string;
+    parentescoId: string;
+    direccion: string;
+    telefono: string;
+    coordenadas:string;
+    UserId?:number;
+}
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const FirstStepScreen: React.FC<Props> = (props: any) => {
-    const [recibido, setRecibido] = useState('');
-    const [parentesco, setParentesco] = useState('');
-    const [direccion, setDireccion] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [items, setItems] = useState([{ label: 'item1', value: 1 }, { label: 'item2', value: 2 }]);
+const FirstStepScreen = (props: Props) => {
+    const navigation=useNavigation();
+    const [items, setItems] = useState<Parentesco[]>([]);
+    const [vivienda, setVivienda] = useState<Vivienda>({
+        nombre: '',
+        parentescoId: '',
+        direccion: '',
+        telefono: '',
+        coordenadas:'0,-0',
+        UserId:0
+    });
+    const isEmpty = (obj: any) => {
+        for (var key in obj) {
+            if (obj[key] == null || obj[key] == "")
+                return true;
+        }
+        return false;
+    }
+    const rest = () => {
+        NetInfo.fetch().then(state => {
+            //if internet valid
+            if (state.isConnected && state.isInternetReachable) {
+                EncuestaServices.getParentesco(props.token)
+                    .then(result => {
+                        Storage.setItem('parentesco', result.data);
+                        console.log('parentesco', result.data)
+                        setItems(result.data.map(({ Id, Description }: Parentesco) => {
+                            return { label: Description, value: Id };
+                        }))
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            } else {
+                Storage.getItem('parentesco')
+                    .then(result => {
+                        setItems(result.map(({ Id, Description }: Parentesco) => {
+                            return { label: Description, value: Id };
+                        }))
+                    })
+                    .catch((err) => {
+                        Alert.alert('Sin data', 'Inice sesión con Internet.',
+                        [
+                            {
+                              text: 'Ok',
+                              onPress: logout
+                            }
+                        ]);
+                        // logout();
+                    })
+            }
+        })
+    }
+    const user=()=>{
+        Storage.getItem('usuario')
+        .then(result=>{
+            setVivienda({...vivienda,['UserId']:result.Id})
+        })
+    }
+    const logout = () => {
+        Storage.removeItem('usuario');
+        navigation.navigate('Login')
+    }
+    useEffect(() => {
+        console.log('cambio')
+        console.log(vivienda)
+        props.onIsEmptyChange({empty:isEmpty(vivienda),vivienda:vivienda});
+    })
+    useEffect(() => {
+        rest();
+        user();
+        // user();
+    }, [])
+
     return (
         <SafeAreaView style={styles.content}>
             <ScrollView contentContainerStyle={styles.scrollView}>
@@ -30,9 +111,9 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                     mode="outlined"
                     style={styles.inputs}
                     label="Recibido por"
-                    value={recibido}
-                    onChangeText={text => setRecibido(text)}
-                    theme={{colors: {primary: Color.primary}}}
+                    value={vivienda.nombre}
+                    onChangeText={text => setVivienda({ ...vivienda, ['nombre']: text })}
+                    theme={{ colors: { primary: Color.primary } }}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
@@ -54,11 +135,11 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                         textAlign: 'left',
                         color: Color.dark
                     }}
-                    activeLabelStyle={{color:Color.danger}}
+                    activeLabelStyle={{ color: Color.danger }}
                     style={{ borderColor: Color.dark, backgroundColor: Color.light }}
                     items={items}
                     defaultValue={null}
-                    onChangeItem={item => setParentesco((item.value))}
+                    onChangeItem={item => setVivienda({ ...vivienda, ['parentescoId']: item.value })}
                     placeholder="Parentesco"
                     placeholderStyle={{ color: Color.dark }}
                     searchable={true}
@@ -69,11 +150,11 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                     mode="outlined"
                     style={styles.inputs}
                     label="Dirección"
-                    value={direccion}
+                    value={vivienda.direccion}
                     multiline={true}
                     numberOfLines={5}
-                    onChangeText={text => setDireccion(text)}
-                    theme={{colors: {primary: Color.primary}}}
+                    onChangeText={text => setVivienda({ ...vivienda, ['direccion']: text })}
+                    theme={{ colors: { primary: Color.primary } }}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
@@ -89,9 +170,10 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                     mode="outlined"
                     style={styles.inputs}
                     label="Teléfono"
-                    value={telefono}
-                    theme={{colors: {primary: Color.primary}}}
-                    onChangeText={text => setTelefono(text)}
+                    value={vivienda.telefono}
+                    keyboardType="phone-pad"
+                    theme={{ colors: { primary: Color.primary } }}
+                    onChangeText={text => setVivienda({ ...vivienda, ['telefono']: text })}
                     left={
                         <TextInput.Icon
                             name={() => <Icon
@@ -104,7 +186,6 @@ const FirstStepScreen: React.FC<Props> = (props: any) => {
                     }
                 />
                 {props.children}
-                <Text>{parentesco}</Text>
             </ScrollView>
         </SafeAreaView>
     )
@@ -116,29 +197,29 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         // alignSelf:'center'
     },
-    title:{
-        fontWeight:'bold',
-        fontSize:18
+    title: {
+        fontWeight: 'bold',
+        fontSize: 18
     },
     inputs: {
         width: deviceWidth / 1.2,
         marginHorizontal: 10,
-        marginTop:5
+        marginTop: 5
     },
     dropdownStyle: {
         width: deviceWidth / 1.2,
         height: 50,
         marginTop: 10,
-        alignSelf:'center'
+        alignSelf: 'center'
     },
     scrollView: {
         // alignSelf:'center',
         // alignSelf:'center',
         // flex:1,
-        height:deviceHeight,
-        width:deviceWidth,
-        alignItems:'center',
-        justifyContent:'center',
+        height: deviceHeight,
+        width: deviceWidth,
+        alignItems: 'center',
+        justifyContent: 'center',
         // backgroundColor: 'pink',
         // marginHorizontal: 20,
         // marginTop:20

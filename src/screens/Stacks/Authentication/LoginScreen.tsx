@@ -7,7 +7,7 @@ import Color from '../../../constants/Colors';
 import Storage from "../../../constants/Storage";
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import EncuestaServices from "../../../services/EncuestaServices";
-import Snackbar from "react-native-snackbar";
+import { ShowSnack } from "../../../constants/Snackbar";
 
 type Props = {
   route: ProfileScreenRouteProp;
@@ -33,39 +33,28 @@ const LoginScreen = (props: Props) => {
               Storage.setItem('usuario', result.data);
               setUser('');
               setPass('');
-              props.navigation.navigate('Home',{token:result.data.token})
+              console.log('token',result.data.token)
+              props.navigation.navigate('HomeStackScreen',
+                {
+                  screen: 'Home',
+                  params: { token: result.data.token }
+                })
             }
           })
           .catch((error) => {
             console.log(error);
             setIndicator(false);
-            Snackbar.show({
-              text: 'Ha ocurrido un error, revise los datos.',
-              duration: Snackbar.LENGTH_LONG,
-              action: {
-                text: 'UNDO',
-                textColor: Color.danger,
-                onPress: () => { /* Do something. */ },
-              },
-            });
+            ShowSnack.show('Ha ocurrido un error, revise los datos.',Color.danger)
           });
       }else{
-        Snackbar.show({
-          text: 'Error de conexión, intente en otra vez.',
-          duration: Snackbar.LENGTH_LONG,
-          action: {
-            text: 'UNDO',
-            textColor: Color.danger,
-            onPress: () => { /* Do something. */ },
-          },
-        });
+        ShowSnack.show('Error de conexión, intente en otra vez.',Color.danger)
       }
     });
 
   }
   return (
     <View style={styles.content}>
-      {/* <Text>Login</Text> */}
+      {/* <Text>{props.route.params.token}</Text> */}
       <Image style={styles.imageLogo} resizeMode='contain' source={require('../../../assets/img/logo.png')} />
       <TextInput
         mode="outlined"

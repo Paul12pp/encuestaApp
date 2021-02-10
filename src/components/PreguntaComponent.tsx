@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Dimensions, Platform } from 'react-native';
-import DropDownPicker from "react-native-dropdown-picker";
 import Color from '../constants/Colors';
 import RNPickerSelect from 'react-native-picker-select';
 import Icon from "react-native-vector-icons/FontAwesome";
+import { DataTable } from 'react-native-paper';
 
 
 const deviceWidth = Dimensions.get('window').width;
@@ -12,6 +12,7 @@ interface Pregunta {
     Description: string;
     Id: number;
     EncuestaId: number;
+    isTabla: boolean;
     opciones: Opcion[];
 }
 interface Opcion {
@@ -22,32 +23,42 @@ interface Opcion {
 
 type Props = {
     data: Pregunta;
+    estudiantes: any[];
+    value: any;
+    enviaData: any;
 }
-class PreguntaComponent extends PureComponent<Props> {
-    items: any = [];
-    constructor(props: any) {
-        super(props)
-        this.items = this.props.data.opciones.map(({ Id, Description }) => {
-            return { label: Description, value: Id };
-        })
-        console.log('pregunta', props.data);
+const PreguntaComponent = (props: Props) => {
+    const [items, setItems] = useState<any>([])
+    
+    const cambio=(text:any, id?:number)=>{
+        console.log('change', text)
+        id 
+        ? props.enviaData({ index: props.value, data: { preguntaId: props.data.Id, respuestaId: text, EstudianteId:id } })
+        : props.enviaData({ index: props.value, data: { preguntaId: props.data.Id, respuestaId: text } });
     }
-    render() {
-        return (
-            <View style={styles.item}>
-                <Text style={styles.pregunta}>{this.props.data.Description}</Text>
+    useEffect(()=>{
+        setItems(props.data.opciones.map(({ Id, Description }) => {
+            return { label: Description, value: Id };
+        }))
+        console.log(props.data.opciones)
+    },[])
+
+    return (
+        <View style={styles.item}>
+            <Text style={styles.pregunta}>{props.data.Description}</Text>
+            {!props.data.isTabla &&
                 <RNPickerSelect
                     // pickerProps={{ac}}
-                    placeholder={{label:'Opción', value:''}}
+                    placeholder={{ label: 'Opción', value: '' }}
                     style={{
-                        ...customPickerStyles,iconContainer:{
-                            position:'absolute',
-                            alignSelf:'flex-start',
-                            top:10,
-                            right:40
+                        ...customPickerStyles, iconContainer: {
+                            position: 'absolute',
+                            alignSelf: 'flex-start',
+                            top: 10,
+                            right: 40
                         }
                     }}
-                    onValueChange={(value) => console.log(value)}
+                    onValueChange={(text) => cambio(text)}
                     useNativeAndroidPickerStyle={false}
                     Icon={() => {
                         return <Icon
@@ -56,12 +67,52 @@ class PreguntaComponent extends PureComponent<Props> {
                             color={Color.dark}
                         />;
                     }}
-                    items={this.items}
-                />
-            </View>
-        );
-    }
-}
+                    items={items}
+                />}
+            {props.data.isTabla &&
+                <DataTable style={styles.dataTable}>
+                    <DataTable.Header>
+                        <DataTable.Title>Nombre</DataTable.Title>
+                        <DataTable.Title>Opción</DataTable.Title>
+                    </DataTable.Header>
+                    {
+                        props.estudiantes.map((est, index) => {
+                            return (
+                                <DataTable.Row key={index}>
+                                    <DataTable.Cell>{est.nombre}</DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <RNPickerSelect
+                                            // pickerProps={{ac}}
+                                            placeholder={{ label: 'Opción', value: '' }}
+                                            style={{
+                                                ...customPickerStylesTabla, iconContainer: {
+                                                    position: 'absolute',
+                                                    alignSelf: 'flex-start',
+                                                    top: Platform.OS == 'ios' ? 5 : 2,
+                                                    right: Platform.OS == 'ios' ? 2 : 10
+                                                }
+                                            }}
+                                            onValueChange={(value) => cambio(value, est.EstudianteId)}
+                                            useNativeAndroidPickerStyle={false}
+                                            Icon={() => {
+                                                return <Icon
+                                                    name='sort-down'
+                                                    size={24}
+                                                    color={Color.dark}
+                                                />;
+                                            }}
+                                            items={items}
+                                        />
+                                    </DataTable.Cell>
+                                </DataTable.Row>
+                            )
+                        })
+                    }
+                </DataTable>
+            }
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     item: {
@@ -73,7 +124,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         paddingHorizontal: 10,
-        color:Color.dark
+        color: Color.dark
     },
     description: {
         paddingTop: 2,
@@ -94,14 +145,21 @@ const styles = StyleSheet.create({
     pregunta: {
         alignSelf: 'center',
         marginTop: 5,
-        marginHorizontal:15,
-        marginBottom:5
+        marginHorizontal: 15,
+        marginBottom: 5
+    },
+    dataTable: {
+        alignSelf: 'center',
+        marginTop: 8,
+        width: deviceWidth / 1.3,
+        borderWidth: 1,
+        borderColor: Color.dark
     }
 })
 const customPickerStyles = StyleSheet.create({
     inputIOS: {
-        width:deviceWidth/1.2,
-        alignSelf:'center',
+        width: deviceWidth / 1.2,
+        alignSelf: 'center',
         fontSize: 14,
         paddingVertical: 10,
         paddingHorizontal: 12,
@@ -126,4 +184,35 @@ const customPickerStyles = StyleSheet.create({
 
 });
 
-export default PreguntaComponent;
+const customPickerStylesTabla = StyleSheet.create({
+    inputIOS: {
+        width: deviceWidth / 2.2,
+        alignSelf: 'center',
+        marginRight: 20,
+        fontSize: 14,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        width: 100,
+        alignSelf: 'center',
+        // marginRight:20,
+        fontSize: 14,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    }
+
+});
+
+
+export default React.memo(PreguntaComponent);
