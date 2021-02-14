@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Data, Login } from '../constants/interfaces';
+import { Data, Login, Visita } from '../constants/interfaces';
 import { BaseUrl, ApiRoutes } from '../Routes'
 
 const EncuestaServices = {
@@ -62,6 +62,22 @@ const EncuestaServices = {
   },
   postListRespuestas: function (token: string, data: Data[]): Promise<any> {
     return axios.post(BaseUrl + ApiRoutes.POST_LIST_RESPUESTAS, data,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+  },
+  postVisita:function(token:string,data:Visita):Promise<any>{
+    return axios.post(BaseUrl + ApiRoutes.POST_VISITA, data,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+  },
+  postListVisita:function(token:string,data:Visita[]):Promise<any>{
+    return axios.post(BaseUrl + ApiRoutes.POST_LIST_VISITA, data,
       {
         headers: {
           "Authorization": `Bearer ${token}`

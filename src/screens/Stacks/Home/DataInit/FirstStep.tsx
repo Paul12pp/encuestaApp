@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Alert, Dimensions, StyleSheet, Text } from "react-native"
+import { Alert, Dimensions, Platform, StyleSheet, Text } from "react-native"
 import { TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -11,6 +11,7 @@ import Color from "../../../../constants/Colors";
 import EncuestaServices from "../../../../services/EncuestaServices";
 import Storage from "../../../../constants/Storage";
 import { Parentesco } from "../../../../constants/interfaces";
+import GetLocation from 'react-native-get-location'
 
 type Props = {
     // route: ProfileScreenRouteProp;
@@ -22,7 +23,7 @@ interface Vivienda {
     nombre: string;
     parentescoId: string;
     direccion: string;
-    telefono: string;
+    telefono?: string;
     coordenadas:string;
     UserId?:number;
 }
@@ -32,11 +33,12 @@ const deviceHeight = Dimensions.get('window').height;
 const FirstStepScreen = (props: Props) => {
     const navigation=useNavigation();
     const [items, setItems] = useState<Parentesco[]>([]);
+    const[locationIcon,setLocationIcon]=useState(Color.dark);
     const [vivienda, setVivienda] = useState<Vivienda>({
         nombre: '',
         parentescoId: '',
         direccion: '',
-        telefono: '',
+        // telefono: '',
         coordenadas:'0,-0',
         UserId:0
     });
@@ -92,15 +94,49 @@ const FirstStepScreen = (props: Props) => {
         Storage.removeItem('usuario');
         navigation.navigate('Login')
     }
+    const telefonoChange=(text:string)=>{
+        if(text!==''){
+            setVivienda({ ...vivienda, telefono: text })
+        }
+        if(text==''){
+            setVivienda({
+                nombre: vivienda.nombre,
+                parentescoId: vivienda.parentescoId,
+                direccion: vivienda.direccion,
+                coordenadas: vivienda.coordenadas,
+                UserId:vivienda.UserId
+            });
+        }
+    }
+    const location =()=>{
+        GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 15000,
+        })
+        .then(location => {
+            console.log(Platform.OS=='ios'?'lot ios':'lot andr',location);
+            setVivienda({...vivienda,coordenadas:`${location.latitude},${location.longitude}`})
+            setLocationIcon(Color.success)
+        })
+        .catch(error => {
+            console.log(Platform.OS=='ios'?'error ios':'error andr');
+            const { code, message } = error;
+            console.warn(code, message);
+            setLocationIcon(Color.danger);
+        })
+    }
     useEffect(() => {
         console.log('cambio')
         console.log(vivienda)
+        // setVivienda({...vivienda,telefono:''})
         props.onIsEmptyChange({empty:isEmpty(vivienda),vivienda:vivienda});
     })
     useEffect(() => {
         rest();
         user();
-        // user();
+        location();
+        return () => {
+        };
     }, [])
 
     return (
@@ -160,7 +196,7 @@ const FirstStepScreen = (props: Props) => {
                             name={() => <Icon
                                 name='map-marker'
                                 size={24}
-                                color={Color.dark}
+                                color={locationIcon}
                             />} // where <Icon /> is any component from vector-icons or anything else
                             onPress={() => { }}
                         />
@@ -173,7 +209,7 @@ const FirstStepScreen = (props: Props) => {
                     value={vivienda.telefono}
                     keyboardType="phone-pad"
                     theme={{ colors: { primary: Color.primary } }}
-                    onChangeText={text => setVivienda({ ...vivienda, ['telefono']: text })}
+                    onChangeText={text => telefonoChange(text)}
                     left={
                         <TextInput.Icon
                             name={() => <Icon

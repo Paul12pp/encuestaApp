@@ -1,25 +1,15 @@
-import React, { PureComponent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Dimensions, Platform } from 'react-native';
 import Color from '../constants/Colors';
 import RNPickerSelect from 'react-native-picker-select';
 import Icon from "react-native-vector-icons/FontAwesome";
-import { DataTable } from 'react-native-paper';
-
+import {  DataTable } from 'react-native-paper';
+import { Pregunta } from '../constants/interfaces';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const deviceWidth = Dimensions.get('window').width;
 
-interface Pregunta {
-    Description: string;
-    Id: number;
-    EncuestaId: number;
-    isTabla: boolean;
-    opciones: Opcion[];
-}
-interface Opcion {
-    Description: string;
-    Id: number;
-    PreguntaId: number;
-}
+
 
 type Props = {
     data: Pregunta;
@@ -29,7 +19,8 @@ type Props = {
 }
 const PreguntaComponent = (props: Props) => {
     const [items, setItems] = useState<any>([])
-    
+    const data =[{ id: 1, name: 'Green Book' }, { id: 2, name: 'Bohemian Rhapsody' }];
+
     const cambio=(text:any, id?:number)=>{
         console.log('change', text)
         id 
@@ -45,6 +36,7 @@ const PreguntaComponent = (props: Props) => {
 
     return (
         <View style={styles.item}>
+            {props.data.Id==21&&console.log('esta es', props.data.Description)}
             <Text style={styles.pregunta}>{props.data.Description}</Text>
             {!props.data.isTabla &&
                 <RNPickerSelect
@@ -68,7 +60,8 @@ const PreguntaComponent = (props: Props) => {
                         />;
                     }}
                     items={items}
-                />}
+                />
+            }
             {props.data.isTabla &&
                 <DataTable style={styles.dataTable}>
                     <DataTable.Header>
@@ -135,18 +128,16 @@ const styles = StyleSheet.create({
     },
     dropdownStyle: {
         width: deviceWidth / 1.2,
-        height: 50,
+        height: 40,
         marginTop: 10,
-        marginBottom: 5,
         alignSelf: 'center',
-        borderColor: Color.danger,
-        borderWidth: 5
+        borderRadius:8,
     },
     pregunta: {
         alignSelf: 'center',
         marginTop: 5,
         marginHorizontal: 15,
-        marginBottom: 5
+        marginBottom: 5,
     },
     dataTable: {
         alignSelf: 'center',

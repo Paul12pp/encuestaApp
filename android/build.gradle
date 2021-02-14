@@ -8,6 +8,7 @@ buildscript {
         targetSdkVersion = 29
         // supportLibVersion = "29.0.0"
         androidXCore = "1.0.2"
+        googlePlayServicesVersion = "17.0.0"
     }
     repositories {
         google()

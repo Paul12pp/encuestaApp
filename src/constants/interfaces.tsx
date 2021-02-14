@@ -37,3 +37,20 @@ export interface Curso{
     id: number;
     Description: string;
 }
+
+export interface Pregunta {
+    Description: string;
+    Id: number;
+    EncuestaId: number;
+    isTabla: boolean;
+    opciones: Opcion[];
+}
+export interface Opcion {
+    Description: string;
+    Id: number;
+    PreguntaId: number;
+}
+export interface Visita{
+    userId:number,
+    fecha:string;
+}

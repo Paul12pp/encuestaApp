@@ -1,5 +1,5 @@
 
-export const BaseUrl = 'https://webapisegura20210124100821.azurewebsites.net/api';
+export const BaseUrl = 'http://api.aiesecrd.com/api';
 export const ApiRoutes = {
 
     GET_USERS: '/api/?results=20',
@@ -11,6 +11,8 @@ export const ApiRoutes = {
     GET_PARENTESCO:'/survey/getparentesco',
     POST_RESPUESTAS:'/survey/addrespuesta',
     POST_LIST_RESPUESTAS:'/survey/addlistarespuesta',
+    POST_VISITA:'/survey/addVisita',
+    POST_LIST_VISITA:'/survey/addVisitaList',
     LOGIN:'/account/authenticate',
     LOGOUT:''
 }

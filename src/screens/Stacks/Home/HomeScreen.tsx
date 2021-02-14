@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react"
 import { Text, StyleSheet, View, TouchableOpacity, Alert, Dimensions, Platform, ToastAndroid, ActivityIndicator } from "react-native"
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CommonActions } from "@react-navigation/native";
+import { check, PERMISSIONS, request } from "react-native-permissions";
 import Color from '../../../constants/Colors';
 import Storage from "../../../constants/Storage";
 import EncuestaServices from "../../../services/EncuestaServices";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { ShowSnack } from "../../../constants/Snackbar";
-import { CommonActions } from "@react-navigation/native";
-
+import Queue from "../../../constants/Queue";
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
@@ -19,8 +20,10 @@ const deviceHeight = Dimensions.get('window').height;
 
 const HomeScreen = (props: Props) => {
   const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState(0);
   const [local, setLocal] = useState(0);
   const [inSincro, setInSincro] = useState(false);
+  const [visiting, setVisiting]=useState(false);
   const[resting,setResting]=useState(false);
   const [parametros, setParametros] = useState({
     ByMe: 0,
@@ -29,13 +32,11 @@ const HomeScreen = (props: Props) => {
   const restPreguntas = () => {
     EncuestaServices.getPreguntas(props.route.params.token)
       .then(result => {
+        // console.log(result.data)
         Storage.setItem('preguntas', result.data);
       })
       .catch(error => {
         console.log('error home', error)
-        if(error="[Error: Network Error]"){
-          ShowSnack.show('Fallo de conexión cargando data esencial.',Color.danger)
-        }
         if (error.response) {
           if (error.response.status === 401) {
             Alert.alert('Token vencido', 'Inice sesión con Internet.',
@@ -46,8 +47,11 @@ const HomeScreen = (props: Props) => {
                 }
               ]);
           }
-    }
-  });
+        }
+        if (error = "[Error: Network Error]") {
+          ShowSnack.show('Fallo de conexión cargando data esencial.', Color.danger)
+        }
+      });
   }
   const restParametros=()=>{
     setResting(true);
@@ -98,21 +102,34 @@ const HomeScreen = (props: Props) => {
     Storage.getItem('respuestas')
     .then(result=>{
       if(result){
+        setLocal(0);
         console.log(result)
         setLocal(result.length)
+        countVisit(result.length)
       }else{
         setLocal(0)
+        countVisit(0);
       }
     })
     Storage.getItem('usuario')
       .then(result => {
         if (result) {
           setUserName(result.name);
+          setUserId(result.Id)
+        }
+      })
+  }
+  const countVisit=(n:number)=>{
+    Storage.getItem('visitas')
+      .then(result => {
+        if (result) {
+          setLocal(n + result.length)
         }
       })
   }
   const sincro = () => {
     setInSincro(true);
+    setVisiting(true);
     ShowSnack.show('Sincronizando data.',Color.success)
     Storage.getItem('respuestas')
     .then(result=>{
@@ -139,12 +156,44 @@ const HomeScreen = (props: Props) => {
           })
       }else{
         setInSincro(false);
-        ShowSnack.show('No hay data para sincronizar.',Color.success)
+        ShowSnack.show('No hay encuestas para sincronizar.',Color.success)
       }
     })
     .catch(error=>{
-      Alert.alert('Error','Ha ocurrido un error, intente en otro momento.');
+      Alert.alert('Error','Ha ocurrido un error con las encuestas, intente en otro momento.');
       setInSincro(false);
+    })
+    Storage.getItem('visitas')
+    .then(result=>{
+      console.log(JSON.stringify('visit',result));
+      if(result){
+        EncuestaServices.postListVisita(props.route.params.token, result)
+          .then(result => {
+            setVisiting(false);
+            Storage.removeItem('visitas')
+            restParametros();
+            verify();
+            Platform.OS == 'ios' ? Alert.alert('Sincronización exitosa.', 'Se han enviado satisfactoriamente las visitas.') : ToastAndroid.show("Sincronizado satisfactoriamente.", ToastAndroid.LONG);
+          })
+          .catch(error => {
+            setVisiting(false);
+            console.log(error);
+            Alert.alert('Error','Ha ocurrido un error, intente en otro momento.');
+            if(error.response){
+              console.log(error.response)
+            }
+            if(error==="[Error: Network Error]"){
+              Alert.alert('Sin conexión', 'Conectate a un red para sincronizar');
+            }
+          })
+      }else{
+        setVisiting(false);
+        ShowSnack.show('No hay visitas para sincronizar.',Color.success)
+      }
+    })
+    .catch(error=>{
+      Alert.alert('Error','Ha ocurrido un error con las visitas, intente en otro momento.');
+      setVisiting(false);
     })
   }
   const logout = () => {
@@ -158,12 +207,93 @@ const HomeScreen = (props: Props) => {
     // props.navigation.navigate('Login')
 
   }
+  const location=()=>{
+    check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+    .then(result=>{
+      if(result=='denied' || result=='unavailable' ||result=='limited' ||result=='blocked'){
+        request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+          .then(result => {
+            console.log('request ios', result);
+          })
+          .catch(error => {
+            console.log('error ios', error);
+          });
+      }
+      console.log('ios permission',result);
+    })
+    check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+    .then(result=>{
+      if(result=='denied' || result=='unavailable' ||result=='limited' ||result=='blocked'){
+        request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+          .then(result => {
+            console.log('result android', result);
+          })
+          .catch(error => {
+            console.log('error android', error);
+          })
+      }
+      console.log('android permissions',result);
+    })
+    
+  }
+  
+  const nonChild = () => {
+    setVisiting(true);
+    const date = new Date()
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const formatter = new Intl.DateTimeFormat('en', { month: 'short' });
+    const month = formatter.format(date);
+    const fecha = `${day}-${month}-${year}`;
+    console.log({ userId: userId, fecha: fecha });
+    EncuestaServices.postVisita(props.route.params.token, { userId: userId, fecha: fecha })
+      .then(result => {
+        Platform.OS == 'ios' ? Alert.alert('Visita enviada', 'Se ha enviado satisfactoriamente la encuesta.') : ToastAndroid.show("Visita enviada satisfactoriamente.", ToastAndroid.LONG);
+        setVisiting(false);
+        verify();
+      })
+      .catch(error => {
+        console.log('error enviando', error);
+        if (error = "[Error: Network Error]") {
+          console.log('network')
+          let cola = new Queue();
+          cola.addVisita( { userId: userId, fecha: fecha });
+          Alert.alert('Sin conexión', 'Visita guardada localmente para futura sincronización.',
+            [
+              {
+                text: 'Ok',
+                onPress: () => props.navigation.navigate('HomeStackScreen', { screen: 'Home', params: { token: props.route.params.token } })
+              }
+            ]);
+          verify();
+        }
+        if (error.response) {
+          let cola = new Queue();
+          cola.addVisita( { userId: userId, fecha: fecha });
+          console.log(error.response.data);
+          if (error.response.status === 401) {
+            Alert.alert('Token vencido', 'Inice sesión con Internet.',
+              [
+                {
+                  text: 'Ok',
+                  onPress: logout
+                }
+              ]);
+          }
+          verify();
+          console.log(error.response.headers);
+        }
+        setVisiting(false);
+      })
+  }
+
   useEffect(() => {
     verify();
     restPreguntas();
     restParametros();
     restParentesco();
     restCursos();
+    location();
   },[])
   return (
     <SafeAreaView style={styles.content}>
@@ -192,6 +322,7 @@ const HomeScreen = (props: Props) => {
               }
             </View>
             <Text style={styles.decripCol}>Cantidad de entrevistados</Text>
+            
           </View>
           <View style={styles.col2}>
             <View style={styles.titleCol}>
@@ -211,7 +342,7 @@ const HomeScreen = (props: Props) => {
         <View style={styles.secondRow}>
         <View style={styles.titleCol}>
               <Text style={styles.numCol}>{local}</Text>
-              {!inSincro&&<Icon
+              {!inSincro &&<Icon
                 name='cached'
                 size={34}
                 color={Color.light}
@@ -229,7 +360,14 @@ const HomeScreen = (props: Props) => {
         style={styles.btns}
         onPress={() => props.navigation.navigate('HomeStackScreen', { screen: 'DataInit', params: { token:props.route.params.token } })}
       >
-        <Text style={styles.btnText}>Nueva encuesta</Text>
+        <Text style={styles.btnText}>Nueva visita</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btns}
+        disabled={visiting}
+        onPress={nonChild}
+      >
+        <Text style={styles.btnText}>Visita sin niño</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.btns}
@@ -327,7 +465,7 @@ const styles = StyleSheet.create({
   viewBtns:{
     alignItems:'center',
     marginTop:20,
-    paddingTop:90,
+    paddingTop:70,
     width:Platform.OS=='android'?deviceHeight/1.8:deviceHeight/2,
     height:Platform.OS=="android"?deviceHeight/1.8:deviceHeight/2,
     borderRadius:500,

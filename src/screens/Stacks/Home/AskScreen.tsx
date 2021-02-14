@@ -73,15 +73,15 @@ const AskScreen = (props: Props) => {
     console.log(data);
   }
   const recibeData=(value:any)=>{
-    console.log('recibido', value);
+    // console.log('recibido', value);
     const temp = values;
     temp[value.index]=value.data;
     setValues(temp);
-    console.log('in state',values)
+    // console.log('in state',values)
     let valid = values.filter((element:any)=>isEmpty(element))
     setValid(valid.length>0?true:false);
-    console.log('otro valid', valid);
-    console.log(valid)
+    // console.log('otro valid', valid);
+    // console.log(valid)
   }
   const isEmpty = (obj: any) => {
     for (var key in obj) {
@@ -112,6 +112,7 @@ const AskScreen = (props: Props) => {
           initialNumToRender={7}
           onEndReached={() => console.log('el final')}
           contentContainerStyle={{flexGrow:1}}
+          
           renderItem={({ item, index }) =>
             <PreguntaComponent key={index} enviaData={recibeData} data={item} value={index} estudiantes={props.route.params.estudiantes} />
           }
@@ -120,7 +121,7 @@ const AskScreen = (props: Props) => {
         <TextInput
                     mode="outlined"
                     style={styles.inputs}
-                    label="Incidentes"
+                    label="Incidencias"
                     value={incidentes}
                     multiline={true}
                     numberOfLines={3}

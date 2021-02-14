@@ -10,14 +10,24 @@ class Queue {
       .then(result => {
         if (result) {
           this.storage = result;
-          console.log('para storage', element);
           this.storage.push(element);
-          console.log('storage', this.storage)
           Storage.setItem('respuestas', this.storage)
         } else {
           this.storage.push(element);
-          console.log('storage', this.storage)
           Storage.setItem('respuestas', this.storage)
+        }
+      })
+  };
+  addVisita(element: any) {
+    Storage.getItem('visitas')
+      .then(result => {
+        if (result) {
+          this.storage = result;
+          this.storage.push(element);
+          Storage.setItem('visitas', this.storage)
+        } else {
+          this.storage.push(element);
+          Storage.setItem('visitas', this.storage)
         }
       })
   };
