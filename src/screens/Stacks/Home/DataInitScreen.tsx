@@ -29,19 +29,11 @@ const DataInitScreen = (props: Props) => {
     // console.log(props.route.params)
   }
   const secondIsEmpty=(value:any)=>{
-    console.log('parent second recibo', value);
+    //console.log('parent second recibo', value);
     setSecondEmpty(value.empty);
     setEstudiantes(value.estudiantes);
-    console.log('lo recibido',value.estudiantes)
-    console.log('in state',estudiantes);
-  }
-  const initialState=()=>{
-    setIsFirstStep(true);
-    setIsLastStep(false);
-    setCurrentStep(0);
-    setFirstEmpty(false);
-    setSecondEmpty(false);
-    setEstudiantes([]);
+    //console.log('lo recibido',value.estudiantes)
+    //console.log('in state',estudiantes);
   }
   const goAsk=()=>{
     // initialState();
@@ -92,7 +84,7 @@ const DataInitScreen = (props: Props) => {
   ];
   useEffect(()=>{
     console.log('dataInit')
-    console.log(props.route.params)
+    //console.log(props.route.params)
   })
   return (
     <View>

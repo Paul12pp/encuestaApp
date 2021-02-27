@@ -24,31 +24,30 @@ export interface Estudiante {
     Escuela: string;
 }
 export interface Escuela{
-
-    Id: number;
-    Nombre: string;
-    Direccion: string;
+    id: number;
+    nombre: string;
+    direccion: string;
 }
 export interface Parentesco {
-    Id: number;
-    Description: string;
+    id: number;
+    description: string;
 }
 export interface Curso{
     id: number;
-    Description: string;
+    description: string;
 }
 
 export interface Pregunta {
-    Description: string;
-    Id: number;
-    EncuestaId: number;
+    description: string;
+    id: number;
+    encuestaId: number;
     isTabla: boolean;
     opciones: Opcion[];
 }
 export interface Opcion {
-    Description: string;
-    Id: number;
-    PreguntaId: number;
+    description: string;
+    id: number;
+    preguntaId: number;
 }
 export interface Visita{
     userId:number,

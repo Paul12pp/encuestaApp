@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Image, ActivityIndicator } from "react-native"
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Image, ActivityIndicator, Alert } from "react-native"
 import { TextInput } from "react-native-paper";
 import NetInfo from "@react-native-community/netinfo";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -55,6 +55,7 @@ const LoginScreen = (props: Props) => {
   return (
     <View style={styles.content}>
       {/* <Text>{props.route.params.token}</Text> */}
+      <Image style={styles.imageLogo} resizeMode='contain' source={require('../../../assets/img/logoB.png')} />
       <Image style={styles.imageLogo} resizeMode='contain' source={require('../../../assets/img/logo.png')} />
       <TextInput
         mode="outlined"

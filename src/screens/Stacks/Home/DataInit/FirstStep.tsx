@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Alert, Dimensions, Platform, StyleSheet, Text } from "react-native"
+import { Alert, Dimensions, StyleSheet, Text } from "react-native"
 import { TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -25,15 +25,15 @@ interface Vivienda {
     direccion: string;
     telefono?: string;
     coordenadas:string;
-    UserId?:number;
+    UserId:number;
 }
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
-
 const FirstStepScreen = (props: Props) => {
     const navigation=useNavigation();
     const [items, setItems] = useState<Parentesco[]>([]);
     const[locationIcon,setLocationIcon]=useState(Color.dark);
+    const [locationCount,setLocationCount]=useState(0);
     const [vivienda, setVivienda] = useState<Vivienda>({
         nombre: '',
         parentescoId: '',
@@ -56,9 +56,9 @@ const FirstStepScreen = (props: Props) => {
                 EncuestaServices.getParentesco(props.token)
                     .then(result => {
                         Storage.setItem('parentesco', result.data);
-                        console.log('parentesco', result.data)
-                        setItems(result.data.map(({ Id, Description }: Parentesco) => {
-                            return { label: Description, value: Id };
+                        //console.log('parentesco', result.data)
+                        setItems(result.data.map(({ id, description }: Parentesco) => {
+                            return { label: description, value: id };
                         }))
                     })
                     .catch(error => {
@@ -67,8 +67,8 @@ const FirstStepScreen = (props: Props) => {
             } else {
                 Storage.getItem('parentesco')
                     .then(result => {
-                        setItems(result.map(({ Id, Description }: Parentesco) => {
-                            return { label: Description, value: Id };
+                        setItems(result.map(({ id, description }: Parentesco) => {
+                            return { label: description, value: id };
                         }))
                     })
                     .catch((err) => {
@@ -85,10 +85,13 @@ const FirstStepScreen = (props: Props) => {
         })
     }
     const user=()=>{
+        console.log('dentro user')
         Storage.getItem('usuario')
-        .then(result=>{
-            setVivienda({...vivienda,['UserId']:result.Id})
-        })
+            .then(result => {
+                setVivienda({ ...vivienda, coordenadas: vivienda.coordenadas, UserId: Number(result.id) })
+                console.log('con id', vivienda);
+                console.log('user updated')
+            });
     }
     const logout = () => {
         Storage.removeItem('usuario');
@@ -108,33 +111,40 @@ const FirstStepScreen = (props: Props) => {
             });
         }
     }
-    const location =()=>{
+    const addressChange=(text:string)=>{
+        setVivienda({ ...vivienda, ['direccion']: text })
+        if(locationCount==0){
+            setLocationCount(1);
+            location();
+        }
+    }
+    const location = () => {
+        console.log('dentro location')
         GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
             timeout: 15000,
         })
-        .then(location => {
-            console.log(Platform.OS=='ios'?'lot ios':'lot andr',location);
-            setVivienda({...vivienda,coordenadas:`${location.latitude},${location.longitude}`})
-            setLocationIcon(Color.success)
-        })
-        .catch(error => {
-            console.log(Platform.OS=='ios'?'error ios':'error andr');
-            const { code, message } = error;
-            console.warn(code, message);
-            setLocationIcon(Color.danger);
-        })
+            .then(location => {
+                //console.log(Platform.OS == 'ios' ? 'lot ios' : 'lot andr', location);
+                setVivienda({ ...vivienda, coordenadas: `${location.latitude},${location.longitude}` });
+                setLocationIcon(Color.success)
+                console.log('location updated')
+            })
+            .catch(error => {
+                //console.log(Platform.OS == 'ios' ? 'error ios' : 'error andr');
+                const { code, message } = error;
+                console.warn(code, message);
+                setLocationIcon(Color.danger);
+            })
     }
     useEffect(() => {
         console.log('cambio')
         console.log(vivienda)
-        // setVivienda({...vivienda,telefono:''})
         props.onIsEmptyChange({empty:isEmpty(vivienda),vivienda:vivienda});
     })
     useEffect(() => {
         rest();
         user();
-        location();
         return () => {
         };
     }, [])
@@ -189,7 +199,7 @@ const FirstStepScreen = (props: Props) => {
                     value={vivienda.direccion}
                     multiline={true}
                     numberOfLines={5}
-                    onChangeText={text => setVivienda({ ...vivienda, ['direccion']: text })}
+                    onChangeText={text => addressChange(text)}
                     theme={{ colors: { primary: Color.primary } }}
                     left={
                         <TextInput.Icon

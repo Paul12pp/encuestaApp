@@ -21,7 +21,7 @@ type Props = {
 interface Estudiantes{
     EstudianteId:number;
     nombre:string;
-    Edad:string;
+    Edad:number;
     cursoId:string;
     Escuela:string;
 }
@@ -35,7 +35,7 @@ const SecondStepScreen = (props: Props) => {
     const [estudy, setEstudy] = useState<Estudiantes>({
         EstudianteId:1,
         nombre: '',
-        Edad: '',
+        Edad: 0,
         cursoId: '',
         Escuela: '',
     });
@@ -69,8 +69,8 @@ const SecondStepScreen = (props: Props) => {
                     .then(result => {
                         Storage.setItem('cursos', result.data);
                         console.log('cursos', result.data)
-                        setItemsC(result.data.map(({ id, Description }:Curso) => {
-                            return { label: Description, value: id };
+                        setItemsC(result.data.map(({ id, description }:Curso) => {
+                            return { label: description, value: id };
                         }))
                     })
                     .catch(error => {
@@ -80,8 +80,8 @@ const SecondStepScreen = (props: Props) => {
             } else {
                     Storage.getItem('cursos')
                     .then(result => {
-                        setItemsC(result.map(({ id, Description }:Curso) => {
-                            return { label: Description, value: id };
+                        setItemsC(result.map(({ id, description }:Curso) => {
+                            return { label: description, value: id };
                         }))
                     })
                     .catch((err) => {
@@ -101,7 +101,7 @@ const SecondStepScreen = (props: Props) => {
         navigation.navigate('Login')
     }
     useEffect(()=>{
-        console.log(itemsC)
+        console.log(estudiantes)
         props.onIsEmptyChange({empty:estudiantes.length==0,estudiantes:estudiantes});
     })
     useEffect(() => {
@@ -133,9 +133,9 @@ const SecondStepScreen = (props: Props) => {
                     mode="outlined"
                     style={styles.inputs}
                     label="Edad"
-                    value={estudy.Edad}
+                    value={estudy.Edad.toString()}
                     keyboardType="number-pad"
-                    onChangeText={text => setEstudy({...estudy,['Edad']:text})}
+                    onChangeText={text => setEstudy({...estudy,['Edad']:Number(text)})}
                     theme={{colors: {primary: Color.primary}}}
                     left={
                         <TextInput.Icon

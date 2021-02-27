@@ -10,6 +10,7 @@ import Storage from "../../../constants/Storage";
 import EncuestaServices from "../../../services/EncuestaServices";
 import { ShowSnack } from "../../../constants/Snackbar";
 import Queue from "../../../constants/Queue";
+import axios from "axios";
 type Props = {
   route: ProfileScreenRouteProp;
   navigation: ProfileScreenNavigationProp;
@@ -26,13 +27,15 @@ const HomeScreen = (props: Props) => {
   const [visiting, setVisiting]=useState(false);
   const[resting,setResting]=useState(false);
   const [parametros, setParametros] = useState({
-    ByMe: 0,
-    All: 0
+    byMe: 0,
+    all: 0
   });
+  const [source, setSource] = useState(axios.CancelToken.source());
+  const [time, setTime] = useState(0);
   const restPreguntas = () => {
     EncuestaServices.getPreguntas(props.route.params.token)
       .then(result => {
-        // console.log(result.data)
+        console.log(result.data)
         Storage.setItem('preguntas', result.data);
       })
       .catch(error => {
@@ -55,12 +58,12 @@ const HomeScreen = (props: Props) => {
   }
   const restParametros=()=>{
     setResting(true);
-    console.log('resting toke', props.route.params.token)
+    // console.log('resting toke', props.route.params.token)
     EncuestaServices.getParametros(props.route.params.token)
       .then(result => {
         setParametros({
-          ByMe: result.data.ByMe,
-          All: result.data.All
+          byMe: result.data.byMe,
+          all: result.data.all
         })
         setResting(false);
       })
@@ -115,7 +118,7 @@ const HomeScreen = (props: Props) => {
       .then(result => {
         if (result) {
           setUserName(result.name);
-          setUserId(result.Id)
+          setUserId(result.id)
         }
       })
   }
@@ -239,25 +242,23 @@ const HomeScreen = (props: Props) => {
   
   const nonChild = () => {
     setVisiting(true);
-    const date = new Date()
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const formatter = new Intl.DateTimeFormat('en', { month: 'short' });
-    const month = formatter.format(date);
-    const fecha = `${day}-${month}-${year}`;
-    console.log({ userId: userId, fecha: fecha });
-    EncuestaServices.postVisita(props.route.params.token, { userId: userId, fecha: fecha })
+    timeOut();
+    const date = new Date().toISOString();
+    console.log({ userId: userId, fecha: date })
+    EncuestaServices.postVisita(props.route.params.token, { userId: userId, fecha: date },source.token)
       .then(result => {
+        timeOut(true);
         Platform.OS == 'ios' ? Alert.alert('Visita enviada', 'Se ha enviado satisfactoriamente la encuesta.') : ToastAndroid.show("Visita enviada satisfactoriamente.", ToastAndroid.LONG);
         setVisiting(false);
         verify();
       })
       .catch(error => {
+        timeOut(true);
         console.log('error enviando', error);
         if (error = "[Error: Network Error]") {
           console.log('network')
           let cola = new Queue();
-          cola.addVisita( { userId: userId, fecha: fecha });
+          cola.addVisita( { userId: userId, fecha: date });
           Alert.alert('Sin conexión', 'Visita guardada localmente para futura sincronización.',
             [
               {
@@ -269,7 +270,7 @@ const HomeScreen = (props: Props) => {
         }
         if (error.response) {
           let cola = new Queue();
-          cola.addVisita( { userId: userId, fecha: fecha });
+          cola.addVisita( { userId: userId, fecha: date });
           console.log(error.response.data);
           if (error.response.status === 401) {
             Alert.alert('Token vencido', 'Inice sesión con Internet.',
@@ -285,6 +286,32 @@ const HomeScreen = (props: Props) => {
         }
         setVisiting(false);
       })
+  }
+
+  const fontSizer=(n:number)=>{
+    let size = 60;
+    if(n>999){
+      size=50
+    }
+    if(n>9999){
+      size=40
+    }
+    if(n>99999){
+      size=30
+    }
+    return size;
+  }
+  const timeOut=(terminator = false)=>{
+    if(Platform.OS=='android'){
+      if(terminator) {
+        clearTimeout(time);
+      } else {
+          setTime(setTimeout(function(){
+            console.log('cancelado');
+            source.cancel();
+          }, 10000))
+      }
+    }
   }
 
   useEffect(() => {
@@ -311,7 +338,7 @@ const HomeScreen = (props: Props) => {
         <View style={styles.firstRow}>
           <View style={styles.col1}>
             <View style={styles.titleCol}>
-              <Text style={styles.numCol}>{parametros.All}</Text>
+              <Text style={[styles.numCol,{fontSize:fontSizer(parametros.all)}]}>{parametros.all}</Text>
               {!resting && <Icon
                 name='people'
                 size={34}
@@ -326,7 +353,7 @@ const HomeScreen = (props: Props) => {
           </View>
           <View style={styles.col2}>
             <View style={styles.titleCol}>
-              <Text style={styles.numCol}>{parametros.ByMe}</Text>
+              <Text style={[styles.numCol,{fontSize:fontSizer(parametros.byMe)}]}>{parametros.byMe}</Text>
               {!resting && <Icon
                 name='grading'
                 size={34}
@@ -341,7 +368,7 @@ const HomeScreen = (props: Props) => {
         </View>
         <View style={styles.secondRow}>
         <View style={styles.titleCol}>
-              <Text style={styles.numCol}>{local}</Text>
+              <Text style={[styles.numCol,{fontSize:fontSizer(local)}]}>{local}</Text>
               {!inSincro &&<Icon
                 name='cached'
                 size={34}
@@ -387,7 +414,6 @@ const styles = StyleSheet.create({
     // justifyContent: 'center'
   },
   dashboard: {
-    // backgroundColor:Color.danger,
     width: deviceWidth,
     height: deviceHeight / 2,
     paddingHorizontal: 5
@@ -465,7 +491,7 @@ const styles = StyleSheet.create({
   viewBtns:{
     alignItems:'center',
     marginTop:20,
-    paddingTop:70,
+    paddingTop:60,
     width:Platform.OS=='android'?deviceHeight/1.8:deviceHeight/2,
     height:Platform.OS=="android"?deviceHeight/1.8:deviceHeight/2,
     borderRadius:500,

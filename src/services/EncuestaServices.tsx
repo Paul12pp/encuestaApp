@@ -12,9 +12,11 @@ const EncuestaServices = {
         }
       })
   },
-  postRespuestas: function (token: string, data: Data): Promise<any> {
+  postRespuestas: function (token: string, data: Data, source:any): Promise<any> {
     return axios.post(BaseUrl + ApiRoutes.POST_RESPUESTAS, data,
       {
+        cancelToken:source,
+        timeout:5000,
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -68,9 +70,11 @@ const EncuestaServices = {
         }
       })
   },
-  postVisita:function(token:string,data:Visita):Promise<any>{
+  postVisita:function(token:string,data:Visita,source:any):Promise<any>{
     return axios.post(BaseUrl + ApiRoutes.POST_VISITA, data,
       {
+        cancelToken:source,
+        timeout:5000,
         headers: {
           "Authorization": `Bearer ${token}`
         }

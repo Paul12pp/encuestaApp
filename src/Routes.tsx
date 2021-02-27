@@ -1,5 +1,6 @@
 
-export const BaseUrl = 'http://api.aiesecrd.com/api';
+// export const BaseUrl = 'http://api.aiesecrd.com/api';
+export const BaseUrl = 'https://webapi20210224152117.azurewebsites.net/api';
 export const ApiRoutes = {
 
     GET_USERS: '/api/?results=20',

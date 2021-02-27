@@ -5,11 +5,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import Icon from "react-native-vector-icons/FontAwesome";
 import {  DataTable } from 'react-native-paper';
 import { Pregunta } from '../constants/interfaces';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 const deviceWidth = Dimensions.get('window').width;
-
-
 
 type Props = {
     data: Pregunta;
@@ -19,25 +16,23 @@ type Props = {
 }
 const PreguntaComponent = (props: Props) => {
     const [items, setItems] = useState<any>([])
-    const data =[{ id: 1, name: 'Green Book' }, { id: 2, name: 'Bohemian Rhapsody' }];
-
     const cambio=(text:any, id?:number)=>{
         console.log('change', text)
         id 
-        ? props.enviaData({ index: props.value, data: { preguntaId: props.data.Id, respuestaId: text, EstudianteId:id } })
-        : props.enviaData({ index: props.value, data: { preguntaId: props.data.Id, respuestaId: text } });
+        ? props.enviaData({ index: props.value, data: { preguntaId: props.data.id, respuestaId: text, EstudianteId:id } })
+        : props.enviaData({ index: props.value, data: { preguntaId: props.data.id, respuestaId: text } });
     }
     useEffect(()=>{
-        setItems(props.data.opciones.map(({ Id, Description }) => {
-            return { label: Description, value: Id };
+        // console.log('data',props.data)
+        setItems(props.data.opciones.map(({ id, description }) => {
+            return { label: description, value: id };
         }))
-        console.log(props.data.opciones)
+        // console.log(props.data.opciones)
     },[])
 
     return (
         <View style={styles.item}>
-            {props.data.Id==21&&console.log('esta es', props.data.Description)}
-            <Text style={styles.pregunta}>{props.data.Description}</Text>
+            <Text style={styles.pregunta}>{props.data.description}</Text>
             {!props.data.isTabla &&
                 <RNPickerSelect
                     // pickerProps={{ac}}
