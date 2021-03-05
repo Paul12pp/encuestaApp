@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { Alert, Dimensions, StyleSheet, Text } from "react-native"
+import { Alert, Dimensions, Platform, StyleSheet, Text } from "react-native"
 import { TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
-import DropDownPicker from 'react-native-dropdown-picker';
 import { ScrollView } from "react-native-gesture-handler";
+import RNPickerSelect from 'react-native-picker-select';
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,6 +24,7 @@ interface Vivienda {
     parentescoId: string;
     direccion: string;
     telefono?: string;
+    cedula?:string;
     coordenadas:string;
     UserId:number;
 }
@@ -33,12 +34,13 @@ const FirstStepScreen = (props: Props) => {
     const navigation=useNavigation();
     const [items, setItems] = useState<Parentesco[]>([]);
     const[locationIcon,setLocationIcon]=useState(Color.dark);
-    const [locationCount,setLocationCount]=useState(0);
+    const [locationD,setLocationD]=useState('');
     const [vivienda, setVivienda] = useState<Vivienda>({
         nombre: '',
         parentescoId: '',
         direccion: '',
         // telefono: '',
+        //cedula:'',
         coordenadas:'0,-0',
         UserId:0
     });
@@ -84,13 +86,10 @@ const FirstStepScreen = (props: Props) => {
             }
         })
     }
-    const user=()=>{
-        console.log('dentro user')
+    const user = () => {
         Storage.getItem('usuario')
             .then(result => {
                 setVivienda({ ...vivienda, coordenadas: vivienda.coordenadas, UserId: Number(result.id) })
-                console.log('con id', vivienda);
-                console.log('user updated')
             });
     }
     const logout = () => {
@@ -99,7 +98,7 @@ const FirstStepScreen = (props: Props) => {
     }
     const telefonoChange=(text:string)=>{
         if(text!==''){
-            setVivienda({ ...vivienda, telefono: text })
+            setVivienda({ ...vivienda, telefono: text.replace(/[^0-9]/g, '')})
         }
         if(text==''){
             setVivienda({
@@ -111,26 +110,36 @@ const FirstStepScreen = (props: Props) => {
             });
         }
     }
-    const addressChange=(text:string)=>{
-        setVivienda({ ...vivienda, ['direccion']: text })
-        if(locationCount==0){
-            setLocationCount(1);
-            location();
+    const cedulaChange=(text:string)=>{
+        if(text!==''){
+            setVivienda({ ...vivienda, cedula: text.replace(/[^0-9]/g, '') })
+        }
+        if(text==''){
+            setVivienda({
+                nombre: vivienda.nombre,
+                parentescoId: vivienda.parentescoId,
+                direccion: vivienda.direccion,
+                coordenadas: vivienda.coordenadas,
+                UserId:vivienda.UserId
+            });
         }
     }
+    const addressChange=()=>{
+        setVivienda({ ...vivienda, coordenadas: locationD });
+    }
     const location = () => {
-        console.log('dentro location')
         GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
             timeout: 15000,
         })
             .then(location => {
+                setLocationD(`${location.latitude},${location.longitude}`);
                 //console.log(Platform.OS == 'ios' ? 'lot ios' : 'lot andr', location);
-                setVivienda({ ...vivienda, coordenadas: `${location.latitude},${location.longitude}` });
+                // setVivienda({ ...vivienda, coordenadas: `${location.latitude},${location.longitude}` });
                 setLocationIcon(Color.success)
-                console.log('location updated')
             })
             .catch(error => {
+                setLocationD('0,-0');
                 //console.log(Platform.OS == 'ios' ? 'error ios' : 'error andr');
                 const { code, message } = error;
                 console.warn(code, message);
@@ -145,6 +154,7 @@ const FirstStepScreen = (props: Props) => {
     useEffect(() => {
         rest();
         user();
+        location();
         return () => {
         };
     }, [])
@@ -171,7 +181,49 @@ const FirstStepScreen = (props: Props) => {
                         />
                     }
                 />
-                <DropDownPicker
+                 <TextInput
+                    mode="outlined"
+                    style={styles.inputs}
+                    label="Cédula"
+                    value={vivienda.cedula}
+                    keyboardType="numeric"
+                    onChangeText={text => cedulaChange(text)}
+                    theme={{ colors: { primary: Color.primary } }}
+                    left={
+                        <TextInput.Icon
+                            name={() => <Icon
+                                name='credit-card'
+                                size={24}
+                                color='black'
+                            />} // where <Icon /> is any component from vector-icons or anything else
+                            onPress={() => { }}
+                        />
+                    }
+                />
+                 <RNPickerSelect
+                    // pickerProps={{ac}}
+                    placeholder={{ label: 'Parentesco', value: '' }}
+                    style={{
+                        ...customPickerStyles, iconContainer: {
+                            position: 'absolute',
+                            alignSelf: 'flex-start',
+                            top: 20,
+                            right: Platform.OS=='ios'?45:10
+                        }
+                    }}
+                    value={vivienda.parentescoId}
+                    onValueChange={(text) => setVivienda({ ...vivienda, ['parentescoId']: text })}
+                    useNativeAndroidPickerStyle={false}
+                    Icon={() => {
+                        return <Icon
+                            name='angle-down'
+                            size={24}
+                            color={Color.dark}
+                        />;
+                    }}
+                    items={items}
+                />
+                {/* <DropDownPicker
                     containerStyle={styles.dropdownStyle}
                     itemStyle={{
                         justifyContent: 'flex-start'
@@ -191,7 +243,7 @@ const FirstStepScreen = (props: Props) => {
                     searchable={true}
                     searchablePlaceholder="Buscar"
                     searchablePlaceholderTextColor={Color.dark}
-                />
+                /> */}
                 <TextInput
                     mode="outlined"
                     style={styles.inputs}
@@ -199,7 +251,8 @@ const FirstStepScreen = (props: Props) => {
                     value={vivienda.direccion}
                     multiline={true}
                     numberOfLines={5}
-                    onChangeText={text => addressChange(text)}
+                    onFocus={addressChange}
+                    onChangeText={text => setVivienda({ ...vivienda, ['direccion']: text })}
                     theme={{ colors: { primary: Color.primary } }}
                     left={
                         <TextInput.Icon
@@ -271,5 +324,34 @@ const styles = StyleSheet.create({
         // marginTop:20
 
     },
+});
+const customPickerStyles = StyleSheet.create({
+    inputIOS: {
+        marginTop:10,
+        width:deviceWidth/1.2,
+        alignSelf:'center',
+        fontSize: 14,
+        paddingVertical: 17,
+        paddingHorizontal: 12,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        marginTop:10,
+        width: deviceWidth / 1.2,
+        alignSelf: 'center',
+        fontSize: 14,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    }
+
 });
 export default FirstStepScreen;

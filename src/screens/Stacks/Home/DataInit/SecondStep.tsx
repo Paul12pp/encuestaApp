@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, ToastAndroid, Alert, View, Platform } from "react-native"
 import DropDownPicker from "react-native-dropdown-picker";
+// import Icon from "react-native-vector-icons/FontAwesome";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import { DataTable, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Color from "../../../../constants/Colors";
 import { useNavigation } from '@react-navigation/native';
-
+import RNPickerSelect from 'react-native-picker-select';
 import EncuestaServices from "../../../../services/EncuestaServices";
 import Storage from "../../../../constants/Storage";
 import { Curso } from "../../../../constants/interfaces";
@@ -21,13 +22,13 @@ type Props = {
 interface Estudiantes{
     EstudianteId:number;
     nombre:string;
-    Edad:number;
+    Edad:string;
     cursoId:string;
     Escuela:string;
 }
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
-
+let controller;
 const SecondStepScreen = (props: Props) => {
     const navigation = useNavigation();
     const [itemsC, setItemsC] = useState<Curso[]>([]);
@@ -35,7 +36,7 @@ const SecondStepScreen = (props: Props) => {
     const [estudy, setEstudy] = useState<Estudiantes>({
         EstudianteId:1,
         nombre: '',
-        Edad: 0,
+        Edad: '',
         cursoId: '',
         Escuela: '',
     });
@@ -102,6 +103,7 @@ const SecondStepScreen = (props: Props) => {
     }
     useEffect(()=>{
         console.log(estudiantes)
+        console.log(estudy)
         props.onIsEmptyChange({empty:estudiantes.length==0,estudiantes:estudiantes});
     })
     useEffect(() => {
@@ -133,9 +135,9 @@ const SecondStepScreen = (props: Props) => {
                     mode="outlined"
                     style={styles.inputs}
                     label="Edad"
-                    value={estudy.Edad.toString()}
+                    value={estudy.Edad}
                     keyboardType="number-pad"
-                    onChangeText={text => setEstudy({...estudy,['Edad']:Number(text)})}
+                    onChangeText={text => setEstudy({...estudy,['Edad']:text.replace(/[^0-9]/g, '')})}
                     theme={{colors: {primary: Color.primary}}}
                     left={
                         <TextInput.Icon
@@ -148,7 +150,31 @@ const SecondStepScreen = (props: Props) => {
                         />
                     }
                 />
-                <DropDownPicker
+                <RNPickerSelect
+                    // pickerProps={{ac}}
+                    placeholder={{ label: 'Curso', value: '' }}
+                    style={{
+                        ...customPickerStyles, iconContainer: {
+                            position: 'absolute',
+                            alignSelf: 'flex-start',
+                            top: 20,
+                            right: Platform.OS=='ios'?40:10
+                        }
+                    }}
+                    value={estudy.cursoId}
+                    onValueChange={(text) => setEstudy({...estudy,['cursoId']:text})}
+                    useNativeAndroidPickerStyle={false}
+                    Icon={() => {
+                        return <Icon
+                            name='keyboard-arrow-down'
+                            size={24}
+                            color={Color.dark}
+                        />;
+                    }}
+                    items={itemsC}
+                />
+                {/* <DropDownPicker
+                    controller={instance => controller = instance}
                     containerStyle={styles.dropdownStyle}
                     zIndex={5000}
                     itemStyle={{
@@ -169,7 +195,7 @@ const SecondStepScreen = (props: Props) => {
                     searchable={true}
                     searchablePlaceholder="Buscar"
                     searchablePlaceholderTextColor={Color.dark}
-                />
+                /> */}
                 <TextInput
                     mode="outlined"
                     style={styles.inputs}

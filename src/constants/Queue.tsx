@@ -3,31 +3,35 @@ import Storage from "./Storage";
 class Queue {
   storage: any;
   constructor() {
-    this.storage = [];
+    this.storage = {visita:[],solovisita:[]};
   };
   addElement(element: any) {
-    Storage.getItem('respuestas')
+    Storage.getItem('all')
       .then(result => {
         if (result) {
-          this.storage = result;
-          this.storage.push(element);
-          Storage.setItem('respuestas', this.storage)
+          this.storage.visita = result.visita;
+          this.storage.solovisita = result.solovisita;
+          this.storage.visita.push(element);
+          Storage.setItem('all', this.storage)
         } else {
-          this.storage.push(element);
-          Storage.setItem('respuestas', this.storage)
+          this.storage.visita.push(element);
+          // this.storage.solovisita = result.solovisita;
+          Storage.setItem('all', this.storage)
         }
       })
   };
   addVisita(element: any) {
-    Storage.getItem('visitas')
+    Storage.getItem('all')
       .then(result => {
         if (result) {
-          this.storage = result;
-          this.storage.push(element);
-          Storage.setItem('visitas', this.storage)
+          this.storage.solovisita = result.solovisita;
+          this.storage.visita = result.visita ? result.visita:this.storage.visita;
+          this.storage.solovisita.push(element);
+          Storage.setItem('all', this.storage)
         } else {
-          this.storage.push(element);
-          Storage.setItem('visitas', this.storage)
+          this.storage.solovisita.push(element);
+          // this.storage.visita = result.visita ? result.visita:this.storage.visita;
+          Storage.setItem('all', this.storage)
         }
       })
   };

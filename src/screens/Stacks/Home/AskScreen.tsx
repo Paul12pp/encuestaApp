@@ -36,49 +36,17 @@ const AskScreen = (props: Props) => {
       respuestas: values,
       Incidentes: incidentes
     }
-    timeOut();
-    EncuestaServices.postRespuestas(props.route.params.token, data, source.token)
-      .then(result => {
-        timeOut(true);
-        Platform.OS == 'ios' ? Alert.alert('Envuesta enviada', 'Se ha enviado satisfactoriamente la encuesta.') : ToastAndroid.show("Encuesta enviada satisfactoriamente.", ToastAndroid.LONG);
-        props.navigation.navigate('HomeStackScreen', { screen: 'Home', params: { token: props.route.params.token } })
-        setIndicator(false);
-      })
-      .catch(error => {
-        timeOut(true);
-        console.log('error enviando', error);
-        if (error = "[Error: Network Error]") {
-          console.log('network')
-          let cola = new Queue();
-          cola.addElement(data);
-          Alert.alert('Sin conexión', 'Encuesta guardada localmente para futura sincronización.',
-            [
-              {
-                text: 'Ok',
-                onPress: () => props.navigation.navigate('HomeStackScreen', { screen: 'Home', params: { token: props.route.params.token } })
-              }
-            ]);
+    let cola = new Queue();
+    cola.addElement(data);
+    console.log('data', data)
+    setIndicator(false);
+    Alert.alert('Envuesta guardada', 'Se ha guardado satisfactoriamente la encuesta.',
+      [
+        {
+          text: 'Ok',
+          onPress: () => { props.navigation.navigate('HomeStackScreen', { screen: 'Home', params: { token: props.route.params.token } }) }
         }
-        if (error.response) {
-
-          let cola = new Queue();
-          cola.addElement(data);
-          console.log(error.response.data);
-          if (error.response.status === 401) {
-            Alert.alert('Token vencido', 'Inice sesión con Internet.',
-              [
-                {
-                  text: 'Ok',
-                  onPress: logout
-                }
-              ]);
-          }
-          console.log(error.response.headers);
-        }
-        setIndicator(false);
-      })
-
-    console.log(data);
+      ]);
   }
   const recibeData = (value: any) => {
     // console.log('recibido', value);
@@ -88,7 +56,7 @@ const AskScreen = (props: Props) => {
     // console.log('in state',values)
     let valid = values.filter((element: any) => isEmpty(element))
     setValid(valid.length > 0 ? true : false);
-    // console.log('otro valid', valid);
+    console.log('otro valid', valid);
     // console.log(valid)
   }
   const isEmpty = (obj: any) => {
@@ -98,23 +66,6 @@ const AskScreen = (props: Props) => {
         return true;
     }
     return false;
-  }
-  const timeOut=(terminator = false)=>{
-    if(Platform.OS=='android'){
-      if(terminator) {
-        clearTimeout(time);
-      } else {
-          setTime(setTimeout(function(){
-            console.log('cancelado');
-            source.cancel();
-          }, 10000))
-      }
-    }
-  }
-
-  const logout = () => {
-    Storage.removeItem('usuario');
-    props.navigation.navigate('Login')
   }
   useEffect(() => {
     // console.log(props.route.params.vivienda)
@@ -159,7 +110,7 @@ const AskScreen = (props: Props) => {
         }
       />
       <TouchableOpacity
-        disabled={indicator}
+        disabled={valid}
         style={[styles.btns, { backgroundColor: valid ? Color.secondary : Color.primary }]}
         onPress={press}
       >

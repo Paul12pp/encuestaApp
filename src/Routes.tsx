@@ -14,6 +14,7 @@ export const ApiRoutes = {
     POST_LIST_RESPUESTAS:'/survey/addlistarespuesta',
     POST_VISITA:'/survey/addVisita',
     POST_LIST_VISITA:'/survey/addVisitaList',
+    POST_All:'/survey/addListaRespuesta',
     LOGIN:'/account/authenticate',
     LOGOUT:''
 }

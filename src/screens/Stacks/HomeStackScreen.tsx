@@ -36,7 +36,7 @@ const HomeStackScreen = (props:Props) => {
         <Drawer.Navigator initialRouteName="Home" screenOptions={{swipeEnabled:false,gestureEnabled:false}}>
             <Drawer.Screen name="Home" component={HomeScreen} initialParams={{token:props.route.params.token}} />
             <Drawer.Screen name="Ask" component={AskScreen} />
-            <Drawer.Screen name="DataInit" component={DataInitScreen} />
+            <Drawer.Screen name="DataInit" component={DataInitScreen} initialParams={{token:props.route.params.token}} />
             <Drawer.Screen name="SecondStep" component={SecondStepScreen} />
             <Drawer.Screen name="FirstStep" component={FirstStepScreen} />
         </Drawer.Navigator>

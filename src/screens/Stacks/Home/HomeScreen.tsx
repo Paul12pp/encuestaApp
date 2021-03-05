@@ -23,13 +23,11 @@ const HomeScreen = (props: Props) => {
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState(0);
   const [local, setLocal] = useState(0);
+  const [localv, setLocalv] = useState(0);
+  const [locale, setLocale] = useState(0);
   const [inSincro, setInSincro] = useState(false);
   const [visiting, setVisiting]=useState(false);
   const[resting,setResting]=useState(false);
-  const [parametros, setParametros] = useState({
-    byMe: 0,
-    all: 0
-  });
   const [source, setSource] = useState(axios.CancelToken.source());
   const [time, setTime] = useState(0);
   const restPreguntas = () => {
@@ -56,25 +54,6 @@ const HomeScreen = (props: Props) => {
         }
       });
   }
-  const restParametros=()=>{
-    setResting(true);
-    // console.log('resting toke', props.route.params.token)
-    EncuestaServices.getParametros(props.route.params.token)
-      .then(result => {
-        setParametros({
-          byMe: result.data.byMe,
-          all: result.data.all
-        })
-        setResting(false);
-      })
-      .catch(error => {
-        if (error = "[Error: Network Error]") {
-          ShowSnack.show('Fallo de conexión cargando data esencial.',Color.danger)
-        }
-        console.log('error aqui', error)
-        setResting(false);
-      })
-  }
   const restParentesco = () => {
     EncuestaServices.getParentesco(props.route.params.token)
       .then(result => {
@@ -84,7 +63,7 @@ const HomeScreen = (props: Props) => {
       .catch(error => {
         console.log(error)
         if (error = "[Error: Network Error]") {
-          ShowSnack.show('Fallo de conexión cargando data esencial.',Color.danger)
+          ShowSnack.show('Fallo de conexión cargando data esencial.', Color.danger)
         }
       })
   }
@@ -97,23 +76,28 @@ const HomeScreen = (props: Props) => {
       .catch(error => {
         console.log(error)
         if (error = "[Error: Network Error]") {
-          ShowSnack.show('Fallo de conexión cargando data esencial.',Color.danger)
+          ShowSnack.show('Fallo de conexión cargando data esencial.', Color.danger)
         }
       })
   }
   const verify = () => {
-    Storage.getItem('respuestas')
-    .then(result=>{
-      if(result){
-        setLocal(0);
-        console.log(result)
-        setLocal(result.length)
-        countVisit(result.length)
-      }else{
-        setLocal(0)
-        countVisit(0);
-      }
-    })
+    console.log('verify')
+    Storage.getItem('all')
+      .then(result => {
+        if (result) {
+          setLocal(0);
+          setLocale(0);
+          setLocalv(0);
+          console.log(result)
+          setLocal(result.visita.length +result.solovisita.length)
+          setLocale(result.visita.length)
+          setLocalv(result.solovisita.length)
+        } else {
+          setLocal(0)
+          setLocale(0)
+          setLocalv(0)
+        }
+      })
     Storage.getItem('usuario')
       .then(result => {
         if (result) {
@@ -122,182 +106,113 @@ const HomeScreen = (props: Props) => {
         }
       })
   }
-  const countVisit=(n:number)=>{
-    Storage.getItem('visitas')
-      .then(result => {
-        if (result) {
-          setLocal(n + result.length)
-        }
-      })
-  }
   const sincro = () => {
     setInSincro(true);
-    setVisiting(true);
-    ShowSnack.show('Sincronizando data.',Color.success)
-    Storage.getItem('respuestas')
-    .then(result=>{
-      console.log(JSON.stringify(result));
-      if(result){
-        EncuestaServices.postListRespuestas(props.route.params.token, result)
-          .then(result => {
-            setInSincro(false);
-            Storage.removeItem('respuestas')
-            restParametros();
-            verify();
-            Platform.OS == 'ios' ? Alert.alert('Sincronización exitosa.', 'Se han enviado satisfactoriamente las encuestas.') : ToastAndroid.show("Sincronizado satisfactoriamente.", ToastAndroid.LONG);
-          })
-          .catch(error => {
-            setInSincro(false);
-            console.log(error);
-            Alert.alert('Error','Ha ocurrido un error, intente en otro momento.');
-            if(error.response){
-              console.log(error.response)
-            }
-            if(error==="[Error: Network Error]"){
-              Alert.alert('Sin conexión', 'Conectate a un red para sincronizar');
-            }
-          })
-      }else{
+    timeOut();
+    Storage.getItem('all')
+      .then(result => {
+        console.log(JSON.stringify('visit', result));
+        if (result) {
+          EncuestaServices.postAll(props.route.params.token, result)
+            .then(result => {
+              setInSincro(false);
+              timeOut(true);
+              Storage.removeItem('all')
+              verify();
+              Platform.OS == 'ios' ? Alert.alert('Sincronización exitosa.', 'Se han enviado satisfactoriamente las visitas.') : ToastAndroid.show("Sincronizado satisfactoriamente.", ToastAndroid.LONG);
+            })
+            .catch(error => {
+              setInSincro(false);
+              timeOut(true);
+              console.log(error);
+              Alert.alert('Error', 'Ha ocurrido un error, intente en otro momento.');
+              if (error.response) {
+                console.log(error.response)
+              }
+              if (error === "[Error: Network Error]") {
+                Alert.alert('Sin conexión', 'Conectate a un red para sincronizar');
+              }
+            })
+        } else {
+          setInSincro(false);
+          timeOut(true);
+          ShowSnack.show('No hay visitas para sincronizar.', Color.success)
+        }
+      })
+      .catch(error => {
+        Alert.alert('Error', 'Ha ocurrido un error con las visitas, intente en otro momento.');
         setInSincro(false);
-        ShowSnack.show('No hay encuestas para sincronizar.',Color.success)
-      }
-    })
-    .catch(error=>{
-      Alert.alert('Error','Ha ocurrido un error con las encuestas, intente en otro momento.');
-      setInSincro(false);
-    })
-    Storage.getItem('visitas')
-    .then(result=>{
-      console.log(JSON.stringify('visit',result));
-      if(result){
-        EncuestaServices.postListVisita(props.route.params.token, result)
-          .then(result => {
-            setVisiting(false);
-            Storage.removeItem('visitas')
-            restParametros();
-            verify();
-            Platform.OS == 'ios' ? Alert.alert('Sincronización exitosa.', 'Se han enviado satisfactoriamente las visitas.') : ToastAndroid.show("Sincronizado satisfactoriamente.", ToastAndroid.LONG);
-          })
-          .catch(error => {
-            setVisiting(false);
-            console.log(error);
-            Alert.alert('Error','Ha ocurrido un error, intente en otro momento.');
-            if(error.response){
-              console.log(error.response)
-            }
-            if(error==="[Error: Network Error]"){
-              Alert.alert('Sin conexión', 'Conectate a un red para sincronizar');
-            }
-          })
-      }else{
-        setVisiting(false);
-        ShowSnack.show('No hay visitas para sincronizar.',Color.success)
-      }
-    })
-    .catch(error=>{
-      Alert.alert('Error','Ha ocurrido un error con las visitas, intente en otro momento.');
-      setVisiting(false);
-    })
+        timeOut(true);
+      })
   }
   const logout = () => {
     Storage.removeItem('usuario');
     props.navigation.dispatch(CommonActions.reset({
       index: 0,
       routes: [
-        { name: 'Login'},
+        { name: 'Login' },
       ],
     }))
     // props.navigation.navigate('Login')
 
   }
-  const location=()=>{
+  const location = () => {
     check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
-    .then(result=>{
-      if(result=='denied' || result=='unavailable' ||result=='limited' ||result=='blocked'){
-        request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
-          .then(result => {
-            console.log('request ios', result);
-          })
-          .catch(error => {
-            console.log('error ios', error);
-          });
-      }
-      console.log('ios permission',result);
-    })
+      .then(result => {
+        if (result == 'denied' || result == 'unavailable' || result == 'limited' || result == 'blocked') {
+          request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+            .then(result => {
+              console.log('request ios', result);
+            })
+            .catch(error => {
+              console.log('error ios', error);
+            });
+        }
+        console.log('ios permission', result);
+      })
     check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
-    .then(result=>{
-      if(result=='denied' || result=='unavailable' ||result=='limited' ||result=='blocked'){
-        request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
-          .then(result => {
-            console.log('result android', result);
-          })
-          .catch(error => {
-            console.log('error android', error);
-          })
-      }
-      console.log('android permissions',result);
-    })
-    
+      .then(result => {
+        if (result == 'denied' || result == 'unavailable' || result == 'limited' || result == 'blocked') {
+          request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+            .then(result => {
+              console.log('result android', result);
+            })
+            .catch(error => {
+              console.log('error android', error);
+            })
+        }
+        console.log('android permissions', result);
+      })
+
   }
-  
   const nonChild = () => {
     setVisiting(true);
-    timeOut();
     const date = new Date().toISOString();
     console.log({ userId: userId, fecha: date })
-    EncuestaServices.postVisita(props.route.params.token, { userId: userId, fecha: date },source.token)
-      .then(result => {
-        timeOut(true);
-        Platform.OS == 'ios' ? Alert.alert('Visita enviada', 'Se ha enviado satisfactoriamente la encuesta.') : ToastAndroid.show("Visita enviada satisfactoriamente.", ToastAndroid.LONG);
-        setVisiting(false);
-        verify();
-      })
-      .catch(error => {
-        timeOut(true);
-        console.log('error enviando', error);
-        if (error = "[Error: Network Error]") {
-          console.log('network')
-          let cola = new Queue();
-          cola.addVisita( { userId: userId, fecha: date });
-          Alert.alert('Sin conexión', 'Visita guardada localmente para futura sincronización.',
-            [
-              {
-                text: 'Ok',
-                onPress: () => props.navigation.navigate('HomeStackScreen', { screen: 'Home', params: { token: props.route.params.token } })
-              }
-            ]);
+    let cola = new Queue();
+    cola.addVisita({ userId: userId, fecha: date });
+    Alert.alert('Visita guardada', 'Se ha guadado satisfactoriamente la visita.',
+    [
+      {
+        text: 'Ok',
+        onPress: ()=>{
           verify();
+          setVisiting(false);
         }
-        if (error.response) {
-          let cola = new Queue();
-          cola.addVisita( { userId: userId, fecha: date });
-          console.log(error.response.data);
-          if (error.response.status === 401) {
-            Alert.alert('Token vencido', 'Inice sesión con Internet.',
-              [
-                {
-                  text: 'Ok',
-                  onPress: logout
-                }
-              ]);
-          }
-          verify();
-          console.log(error.response.headers);
-        }
-        setVisiting(false);
-      })
+      }
+    ]);
+    // verify();
   }
-
-  const fontSizer=(n:number)=>{
+  const fontSizer = (n: number) => {
     let size = 60;
-    if(n>999){
-      size=50
+    if (n > 999) {
+      size = 50
     }
-    if(n>9999){
-      size=40
+    if (n > 9999) {
+      size = 40
     }
-    if(n>99999){
-      size=30
+    if (n > 99999) {
+      size = 30
     }
     return size;
   }
@@ -314,14 +229,15 @@ const HomeScreen = (props: Props) => {
     }
   }
 
+
   useEffect(() => {
+    console.log('token in home',props.route.params.token)
     verify();
     restPreguntas();
-    restParametros();
     restParentesco();
     restCursos();
     location();
-  },[])
+  }, [])
   return (
     <SafeAreaView style={styles.content}>
       <View style={styles.dashboard}>
@@ -338,9 +254,9 @@ const HomeScreen = (props: Props) => {
         <View style={styles.firstRow}>
           <View style={styles.col1}>
             <View style={styles.titleCol}>
-              <Text style={[styles.numCol,{fontSize:fontSizer(parametros.all)}]}>{parametros.all}</Text>
+              <Text style={[styles.numCol,{fontSize:fontSizer(locale)}]}>{locale}</Text>
               {!resting && <Icon
-                name='people'
+                name='how-to-reg'
                 size={34}
                 color={Color.light}
               />}
@@ -348,14 +264,14 @@ const HomeScreen = (props: Props) => {
                 <ActivityIndicator animating={resting} style={styles.indicator} size="small" color={Color.light} />
               }
             </View>
-            <Text style={styles.decripCol}>Cantidad de entrevistados</Text>
+            <Text style={styles.decripCol}> Visitas Efectivas</Text>
             
           </View>
           <View style={styles.col2}>
             <View style={styles.titleCol}>
-              <Text style={[styles.numCol,{fontSize:fontSizer(parametros.byMe)}]}>{parametros.byMe}</Text>
+              <Text style={[styles.numCol,{fontSize:fontSizer(localv)}]}>{localv}</Text>
               {!resting && <Icon
-                name='grading'
+                name='person-remove'
                 size={34}
                 color={Color.light}
               />}
@@ -363,23 +279,23 @@ const HomeScreen = (props: Props) => {
                 <ActivityIndicator animating={resting} style={styles.indicator} size="small" color={Color.light} />
               }
             </View>
-            <Text style={styles.decripCol}>Cantidad de entrevistados por mi</Text>
+            <Text style={styles.decripCol}>Visitas No Efectivas</Text>
           </View>
         </View>
         <View style={styles.secondRow}>
-        <View style={styles.titleCol}>
-              <Text style={[styles.numCol,{fontSize:fontSizer(local)}]}>{local}</Text>
-              {!inSincro &&<Icon
-                name='cached'
-                size={34}
-                color={Color.light}
-                onPress={sincro}
-              />}
-              {inSincro &&
-                <ActivityIndicator animating={resting} style={styles.indicator} size="small" color={Color.light} />
-              }
-            </View>
-            <Text style={styles.decripCol}>Cantidad no sincronizada</Text>
+          <View style={styles.titleCol}>
+            <Text style={[styles.numCol, { fontSize: fontSizer(local) }]}>{local}</Text>
+            {!inSincro && <Icon
+              name='cached'
+              size={34}
+              color={Color.light}
+              onPress={sincro}
+            />}
+            {inSincro &&
+              <ActivityIndicator animating={inSincro} style={styles.indicator} size="small" color={Color.light} />
+            }
+          </View>
+          <Text style={styles.decripCol}>Cantidad no sincronizada</Text>
         </View>
       </View>
       <View style={styles.viewBtns}>
@@ -424,15 +340,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
     borderRadius: 10,
     width: 210,
-    marginHorizontal:10,
-    justifyContent:'center'
+    marginHorizontal: 10,
+    justifyContent: 'center'
   },
   btnText: {
     color: Color.light,
     alignSelf: 'center',
     textAlign: 'center',
-    fontWeight:'bold',
-    fontSize:18
+    fontWeight: 'bold',
+    fontSize: 18
   },
   viewUserName: {
     flexDirection: 'row',
@@ -479,25 +395,25 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10
   },
-  secondRow:{
-    backgroundColor:Color.third,
-    width:deviceWidth/1.08,
-    height:deviceHeight/5,
-    borderRadius:10,
-    marginTop:19,
-    overflow:'hidden',
-    alignSelf:'center'
+  secondRow: {
+    backgroundColor: Color.third,
+    width: deviceWidth / 1.08,
+    height: deviceHeight / 5,
+    borderRadius: 10,
+    marginTop: 19,
+    overflow: 'hidden',
+    alignSelf: 'center'
   },
-  viewBtns:{
-    alignItems:'center',
-    marginTop:20,
-    paddingTop:60,
-    width:Platform.OS=='android'?deviceHeight/1.8:deviceHeight/2,
-    height:Platform.OS=="android"?deviceHeight/1.8:deviceHeight/2,
-    borderRadius:500,
-    backgroundColor:Color.secondary,
+  viewBtns: {
+    alignItems: 'center',
+    marginTop: 20,
+    paddingTop: 60,
+    width: Platform.OS == 'android' ? deviceHeight / 1.8 : deviceHeight / 2,
+    height: Platform.OS == "android" ? deviceHeight / 1.8 : deviceHeight / 2,
+    borderRadius: 500,
+    backgroundColor: Color.secondary,
     position: 'absolute',
-    bottom:Platform.OS=='android'?(-deviceHeight)/4.2:(-deviceHeight)/5
+    bottom: Platform.OS == 'android' ? (-deviceHeight) / 4.2 : (-deviceHeight) / 5
   },
   sincro: {
     borderColor: 'gray',
@@ -510,9 +426,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15
   },
-  indicator:{
-    marginTop:5,
-    marginRight:10
+  indicator: {
+    marginTop: 5,
+    marginRight: 10
   },
 })
 export default HomeScreen;

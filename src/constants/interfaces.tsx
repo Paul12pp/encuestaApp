@@ -53,3 +53,7 @@ export interface Visita{
     userId:number,
     fecha:string;
 }
+export interface All{
+    SoloVisita:Visita[], 
+    Visita: Respuesta[] 
+}
