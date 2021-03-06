@@ -143,6 +143,8 @@ const FirstStepScreen = (props: Props) => {
                 //console.log(Platform.OS == 'ios' ? 'error ios' : 'error andr');
                 const { code, message } = error;
                 console.warn(code, message);
+                Alert.alert(code,message);
+                Alert.alert('',JSON.parse(error));
                 setLocationIcon(Color.danger);
             })
     }
@@ -154,7 +156,7 @@ const FirstStepScreen = (props: Props) => {
     useEffect(() => {
         rest();
         user();
-        location();
+        //location();
         return () => {
         };
     }, [])
@@ -251,7 +253,6 @@ const FirstStepScreen = (props: Props) => {
                     value={vivienda.direccion}
                     multiline={true}
                     numberOfLines={5}
-                    onFocus={addressChange}
                     onChangeText={text => setVivienda({ ...vivienda, ['direccion']: text })}
                     theme={{ colors: { primary: Color.primary } }}
                     left={

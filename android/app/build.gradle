@@ -131,8 +131,8 @@ android {
         applicationId "com.encuestaapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "2.2.1"
+        versionCode 4
+        versionName "3.0.1"
     }
     splits {
         abi {
