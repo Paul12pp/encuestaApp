@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Alert, Dimensions, Platform, StyleSheet, Text } from "react-native"
+import { Alert, Dimensions, Platform, StyleSheet, Text, DeviceEventEmitter } from "react-native"
 import { TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Color from "../../../../constants/Colors";
 import EncuestaServices from "../../../../services/EncuestaServices";
 import Storage from "../../../../constants/Storage";
-import { Parentesco } from "../../../../constants/interfaces";
+import { Parentesco, IProvincia } from "../../../../constants/interfaces";
 import GetLocation from 'react-native-get-location'
 
 type Props = {
@@ -23,26 +23,34 @@ interface Vivienda {
     nombre: string;
     parentescoId: string;
     direccion: string;
+    provincia: string;
+    municipio: string;
     telefono?: string;
-    cedula?:string;
-    coordenadas:string;
-    UserId:number;
+    cedula?: string;
+    coordenadas: string;
+    UserId: number;
 }
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 const FirstStepScreen = (props: Props) => {
-    const navigation=useNavigation();
+    const navigation = useNavigation();
     const [items, setItems] = useState<Parentesco[]>([]);
-    const[locationIcon,setLocationIcon]=useState(Color.dark);
-    const [locationD,setLocationD]=useState('');
+    const [provincias, setProvincias] = useState<IProvincia[]>([]);
+    const [municipios, setMunicipios] = useState([]);
+    const [locationIcon, setLocationIcon] = useState(Color.dark);
+    const [locationD, setLocationD] = useState('');
+    const [tempCedula, setTempCedula] = useState('');
     const [vivienda, setVivienda] = useState<Vivienda>({
         nombre: '',
         parentescoId: '',
         direccion: '',
+        provincia: '',
+        municipio: '',
+        cedula:'',
         // telefono: '',
         //cedula:'',
-        coordenadas:'0,-0',
-        UserId:0
+        coordenadas: '0,-0',
+        UserId: 0
     });
     const isEmpty = (obj: any) => {
         for (var key in obj) {
@@ -75,15 +83,31 @@ const FirstStepScreen = (props: Props) => {
                     })
                     .catch((err) => {
                         Alert.alert('Sin data', 'Inice sesión con Internet.',
-                        [
-                            {
-                              text: 'Ok',
-                              onPress: logout
-                            }
-                        ]);
+                            [
+                                {
+                                    text: 'Ok',
+                                    onPress: logout
+                                }
+                            ]);
                         // logout();
                     })
             }
+            Storage.getItem('provincias')
+                .then(result => {
+                    setProvincias(result.provincias.map(({ nombre, municipios }: IProvincia) => {
+                        return { label: nombre, value: nombre, municipios: municipios };
+                    }))
+                })
+                .catch((err) => {
+                    Alert.alert('Sin data', 'Inice sesión con Internet.',
+                        [
+                            {
+                                text: 'Ok',
+                                onPress: logout
+                            }
+                        ]);
+                    // logout();
+                })
         })
     }
     const user = () => {
@@ -96,35 +120,70 @@ const FirstStepScreen = (props: Props) => {
         Storage.removeItem('usuario');
         navigation.navigate('Login')
     }
-    const telefonoChange=(text:string)=>{
-        if(text!==''){
-            setVivienda({ ...vivienda, telefono: text.replace(/[^0-9]/g, '')})
+    const provinciaChange = (text: string) => {
+        if (text !== '') {
+            console.log(text);
+
+            setVivienda({ ...vivienda, provincia: text })
+
+            let municipio = provincias.filter(prov => { return (prov.label == text) });
+            setMunicipios(municipio[0].municipios.map((value) => {
+                return { label: value, value: value };
+            }))
+
         }
-        if(text==''){
+        if (text == '') {
             setVivienda({
                 nombre: vivienda.nombre,
                 parentescoId: vivienda.parentescoId,
+                cedula: vivienda.cedula,
+                municipio: vivienda.municipio,
+                provincia: vivienda.provincia,
                 direccion: vivienda.direccion,
                 coordenadas: vivienda.coordenadas,
-                UserId:vivienda.UserId
+                UserId: vivienda.UserId
             });
         }
     }
-    const cedulaChange=(text:string)=>{
-        if(text!==''){
-            setVivienda({ ...vivienda, cedula: text.replace(/[^0-9]/g, '') })
+    const telefonoChange = (text: string) => {
+        if (text !== '') {
+            setVivienda({ ...vivienda, telefono: text.replace(/[^0-9]/g, '') })
         }
-        if(text==''){
+        if (text == '') {
             setVivienda({
                 nombre: vivienda.nombre,
                 parentescoId: vivienda.parentescoId,
+                municipio: vivienda.municipio,
+                provincia: vivienda.provincia,
                 direccion: vivienda.direccion,
+                cedula: vivienda.cedula,
                 coordenadas: vivienda.coordenadas,
-                UserId:vivienda.UserId
+                UserId: vivienda.UserId
             });
         }
     }
-    const addressChange=()=>{
+    const cedulaChange = (text: string) => {
+        setTempCedula(text.replace(/[^0-9]/g,''))
+        if (text !== '') {
+            setTempCedula(text.replace(/[^0-9]/g,''))
+            if(text.length == 11){
+                setVivienda({ ...vivienda, cedula: text.replace(/[^0-9]/g, '') })
+            }
+        }
+        if (text == '') {
+            setVivienda({
+                nombre: vivienda.nombre,
+                parentescoId: vivienda.parentescoId,
+                provincia: vivienda.provincia,
+                municipio: vivienda.municipio,
+                cedula: vivienda.cedula,
+                direccion: vivienda.direccion,
+                coordenadas: vivienda.coordenadas,
+                UserId: vivienda.UserId
+            });
+        }
+    }
+    const addressChange = () => {
         setVivienda({ ...vivienda, coordenadas: locationD });
     }
     const location = () => {
@@ -143,15 +202,16 @@ const FirstStepScreen = (props: Props) => {
                 //console.log(Platform.OS == 'ios' ? 'error ios' : 'error andr');
                 const { code, message } = error;
                 console.warn(code, message);
-                Alert.alert(code,message);
-                Alert.alert('',JSON.parse(error));
+                Alert.alert(code, message);
+                Alert.alert('', JSON.parse(error));
                 setLocationIcon(Color.danger);
             })
     }
     useEffect(() => {
+        DeviceEventEmitter.removeAllListeners('hardwareBackPress');
         console.log('cambio')
         console.log(vivienda)
-        props.onIsEmptyChange({empty:isEmpty(vivienda),vivienda:vivienda});
+        props.onIsEmptyChange({ empty: isEmpty(vivienda), vivienda: vivienda });
     })
     useEffect(() => {
         rest();
@@ -183,11 +243,12 @@ const FirstStepScreen = (props: Props) => {
                         />
                     }
                 />
-                 <TextInput
+                <TextInput
                     mode="outlined"
                     style={styles.inputs}
+                    maxLength={11}
                     label="Cédula"
-                    value={vivienda.cedula}
+                    value={tempCedula}
                     keyboardType="numeric"
                     onChangeText={text => cedulaChange(text)}
                     theme={{ colors: { primary: Color.primary } }}
@@ -202,7 +263,7 @@ const FirstStepScreen = (props: Props) => {
                         />
                     }
                 />
-                 <RNPickerSelect
+                <RNPickerSelect
                     // pickerProps={{ac}}
                     placeholder={{ label: 'Parentesco', value: '' }}
                     style={{
@@ -210,7 +271,7 @@ const FirstStepScreen = (props: Props) => {
                             position: 'absolute',
                             alignSelf: 'flex-start',
                             top: 20,
-                            right: Platform.OS=='ios'?45:10
+                            right: Platform.OS == 'ios' ? 45 : 10
                         }
                     }}
                     value={vivienda.parentescoId}
@@ -224,6 +285,52 @@ const FirstStepScreen = (props: Props) => {
                         />;
                     }}
                     items={items}
+                />
+                <RNPickerSelect
+                    // pickerProps={{ac}}
+                    placeholder={{ label: 'Provincia', value: '' }}
+                    style={{
+                        ...customPickerStyles, iconContainer: {
+                            position: 'absolute',
+                            alignSelf: 'flex-start',
+                            top: 20,
+                            right: Platform.OS == 'ios' ? 45 : 10
+                        }
+                    }}
+                    value={vivienda.provincia}
+                    onValueChange={(text) => provinciaChange(text)}
+                    useNativeAndroidPickerStyle={false}
+                    Icon={() => {
+                        return <Icon
+                            name='angle-down'
+                            size={24}
+                            color={Color.dark}
+                        />;
+                    }}
+                    items={provincias}
+                />
+                <RNPickerSelect
+                    // pickerProps={{ac}}
+                    placeholder={{ label: 'Municipio', value: '' }}
+                    style={{
+                        ...customPickerStyles, iconContainer: {
+                            position: 'absolute',
+                            alignSelf: 'flex-start',
+                            top: 20,
+                            right: Platform.OS == 'ios' ? 45 : 10
+                        }
+                    }}
+                    value={vivienda.municipio}
+                    onValueChange={(text) => setVivienda({ ...vivienda, ['municipio']: text })}
+                    useNativeAndroidPickerStyle={false}
+                    Icon={() => {
+                        return <Icon
+                            name='angle-down'
+                            size={24}
+                            color={Color.dark}
+                        />;
+                    }}
+                    items={municipios}
                 />
                 {/* <DropDownPicker
                     containerStyle={styles.dropdownStyle}
@@ -328,9 +435,9 @@ const styles = StyleSheet.create({
 });
 const customPickerStyles = StyleSheet.create({
     inputIOS: {
-        marginTop:10,
-        width:deviceWidth/1.2,
-        alignSelf:'center',
+        marginTop: 10,
+        width: deviceWidth / 1.2,
+        alignSelf: 'center',
         fontSize: 14,
         paddingVertical: 17,
         paddingHorizontal: 12,
@@ -341,7 +448,7 @@ const customPickerStyles = StyleSheet.create({
         paddingRight: 30, // to ensure the text is never behind the icon
     },
     inputAndroid: {
-        marginTop:10,
+        marginTop: 10,
         width: deviceWidth / 1.2,
         alignSelf: 'center',
         fontSize: 14,

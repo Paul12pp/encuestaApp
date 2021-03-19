@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Text, StyleSheet, View, TouchableOpacity, Alert, Dimensions, Platform, ToastAndroid, ActivityIndicator } from "react-native"
+import { BackHandler, DeviceEventEmitter, Text, StyleSheet, View, TouchableOpacity, Alert, Dimensions, Platform, ToastAndroid, ActivityIndicator } from "react-native"
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -35,6 +35,30 @@ const HomeScreen = (props: Props) => {
       .then(result => {
         console.log(result.data)
         Storage.setItem('preguntas', result.data);
+      })
+      .catch(error => {
+        console.log('error home', error)
+        if (error.response) {
+          if (error.response.status === 401) {
+            Alert.alert('Token vencido', 'Inice sesión con Internet.',
+              [
+                {
+                  text: 'Ok',
+                  onPress: logout
+                }
+              ]);
+          }
+        }
+        if (error = "[Error: Network Error]") {
+          ShowSnack.show('Fallo de conexión cargando data esencial.', Color.danger)
+        }
+      });
+  }
+  const restProvincias = () => {
+    EncuestaServices.getParametros(props.route.params.token)
+      .then(result => {
+        console.log(result.data)
+        Storage.setItem('provincias', result.data);
       })
       .catch(error => {
         console.log('error home', error)
@@ -113,6 +137,10 @@ const HomeScreen = (props: Props) => {
       .then(result => {
         console.log(JSON.stringify('visit', result));
         if (result) {
+          console.log('para enviar');
+          
+          console.log(JSON.stringify(result));
+          
           EncuestaServices.postAll(props.route.params.token, result)
             .then(result => {
               setInSincro(false);
@@ -231,12 +259,25 @@ const HomeScreen = (props: Props) => {
 
 
   useEffect(() => {
+    
+
     console.log('token in home',props.route.params.token)
     verify();
+    restProvincias();
     restPreguntas();
     restParentesco();
     restCursos();
     location();
+    DeviceEventEmitter.removeAllListeners('hardwareBackPress')
+    DeviceEventEmitter.addListener('hardwareBackPress', () => {
+      let invokeDefault = true
+      BackHandler.exitApp()
+
+    })
+    return () => {
+      DeviceEventEmitter.removeAllListeners('hardwareBackPress');
+    };
+
   }, [])
   return (
     <SafeAreaView style={styles.content}>

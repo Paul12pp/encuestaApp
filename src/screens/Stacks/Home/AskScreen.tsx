@@ -29,11 +29,14 @@ const AskScreen = (props: Props) => {
 
   const press = () => {
     setIndicator(true);
+    const respuestaFinal = values.filter(function(el: any){
+      return el != null;
+    })
     const data = {
       ...props.route.params.vivienda,
       EncuestaId: 1,
       Estudiantes: props.route.params.estudiantes,
-      respuestas: values,
+      respuestas: respuestaFinal,
       Incidentes: incidentes
     }
     let cola = new Queue();
@@ -49,15 +52,51 @@ const AskScreen = (props: Props) => {
       ]);
   }
   const recibeData = (value: any) => {
-    // console.log('recibido', value);
+    console.log(value);
+    console.log('valor');
+    let isChecker : boolean = (value.data.basura) ? true : false;
+    console.log(isChecker);
+    
+    if(!isChecker){
+      
+      console.log('recibido', value);
     const temp = values;
+    console.log(values);
+    
     temp[value.index] = value.data;
+    console.log('despues');
+    console.log(temp[value.index]);
+    
+    console.log(temp);
+    
     setValues(temp);
     // console.log('in state',values)
     let valid = values.filter((element: any) => isEmpty(element))
+    console.log(valid);
+    
     setValid(valid.length > 0 ? true : false);
     console.log('otro valid', valid);
     // console.log(valid)
+    }else{
+      if(!value.delete){
+        let temp = [...values];
+        temp.push(value.data)
+        setValues(temp)
+      }else{
+        let temp = [...values];
+        let respuestaFinal = values.filter(function(el: any){
+          return el != null;
+        })
+        var removedIndex = respuestaFinal.map(function(item) { return item.respuestaId; }).indexOf(value.data.respuestaId);
+        
+        respuestaFinal.splice(removedIndex, 1)
+        setValues(respuestaFinal)
+        console.log(respuestaFinal);
+        
+      }
+     
+    }
+    
   }
   const isEmpty = (obj: any) => {
     for (var key in obj) {
@@ -76,7 +115,7 @@ const AskScreen = (props: Props) => {
   }, []);
   return (
     <SafeAreaView style={styles.content}>
-      <Text style={styles.title}>Encuesta</Text>
+      <Text style={styles.title}>Visita</Text>
       {listado &&
         <FlatList style={styles.list}
           data={listado}

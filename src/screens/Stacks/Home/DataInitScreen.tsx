@@ -1,6 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react"
-import {  StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import {  StyleSheet, Text, TouchableOpacity, View, BackHandler, Alert, DeviceEventEmitter} from "react-native"
 import Wizard from "react-native-wizard";
 import Color from "../../../constants/Colors";
 import { ProfileScreenNavigationProp, ProfileScreenRouteProp } from "../../../RouteStack";
@@ -35,6 +35,21 @@ const DataInitScreen = (props: Props) => {
     //console.log('lo recibido',value.estudiantes)
     //console.log('in state',estudiantes);
   }
+
+  const backPressed = () => {
+    console.log('asas');
+    
+    Alert.alert(
+      'Exit App',
+      'Do you want to exit?',
+      [
+        {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+      ],
+      { cancelable: false });
+      return true;
+  }
+
   const goAsk=()=>{
     // initialState();
     // const resetAction = props.navigation.reset();
@@ -50,6 +65,21 @@ const DataInitScreen = (props: Props) => {
   const stepList = [
     {
       content: <FirstStepScreen navigation={props.navigation} onIsEmptyChange={firstIsEmpty} token={props.route.params.token}>
+        <View style={{
+          justifyContent: "space-between",
+          flexDirection: "row",
+        }}>
+          <TouchableOpacity
+            style={styles.btns}
+            onPress={() =>   props.navigation.dispatch(CommonActions.reset({
+              index: 0,
+              routes: [
+                { name: 'Home',params:{token:props.route.params.token}}
+              ]
+            }))}
+            >
+            <Text style={styles.btnText}>Cancelar</Text>
+          </TouchableOpacity>
         <TouchableOpacity
           disabled={firstEmpty}
           style={[styles.btns,{backgroundColor:firstEmpty?Color.secondary:Color.primary}]}
@@ -57,6 +87,7 @@ const DataInitScreen = (props: Props) => {
         >
           <Text style={styles.btnText}>Siguiente</Text>
         </TouchableOpacity>
+        </View>
       </FirstStepScreen>
     },
     {
@@ -83,6 +114,7 @@ const DataInitScreen = (props: Props) => {
     }
   ];
   useEffect(()=>{
+    DeviceEventEmitter.removeAllListeners('hardwareBackPress');
     console.log('dataInit')
     //console.log(props.route.params)
   })

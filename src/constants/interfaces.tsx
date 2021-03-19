@@ -14,6 +14,13 @@ export interface Data {
     Estudiantes: Estudiante[];
     respuestas: Respuesta[];
 }
+
+export interface IProvincia {
+    label: string;
+    nombre: string;
+    municipios: string[];
+}
+
 export interface Respuesta {
     preguntaId: number;
     respuestaId: number;
@@ -42,6 +49,7 @@ export interface Pregunta {
     id: number;
     encuestaId: number;
     isTabla: boolean;
+    tipos: string;
     opciones: Opcion[];
 }
 export interface Opcion {
